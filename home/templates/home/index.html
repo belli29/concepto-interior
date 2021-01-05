@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="container h-100">
+        <div class="row h-100 text-center">
+            <div class="col-12 col-md-5 my-auto mx-auto ">
+                <h1 class="display-5 text-white logo-font" > <strong>Muebles elegantes <br>y faciles de montar</strong></h1>
+                <div class="my-5">
+                    <h4>
+                        <a id="index-button" href="{% url 'products'%}" class="shop-now-button btn btn-lg rounded-0 text-uppercase py-3" style="box-shadow:none">Revisa {% if request.user.is_superuser %} tu {% else %} nuestro {% endif %}catalogo</a>
+                    </h4>
+                </div>
+        </div>
+    </div>
+{% endblock %}
