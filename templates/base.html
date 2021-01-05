@@ -1,0 +1,241 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block meta %}
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% endblock %}
+    
+    {% block extra_meta %}
+    {% endblock %}
+    
+    {% block corecss %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Cantarell:wght@700&family=Muli&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% endblock %}
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% block corejs %}
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/6866922cc5.js" crossorigin="anonymous"></script>
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <!-- Bootrstrap and Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <!-- Stripe-->
+        <script src="https://js.stripe.com/v3/"></script>
+    {% endblock %}
+
+    {% block extra_js %}
+    {% endblock %}
+
+    <title>Concepto Interior{% block extra_title%}{% endblock %}</title>
+  </head>
+  <body>
+    <header class="container-fluid fixed-top bg-white ">
+        <div class="row my-4">
+            <div class=" col-12 mx-5 mx-auto ">
+                <div class="row">
+                    <!-- logo title from min large screens  -->
+                    <div class=" col-4 d-none d-lg-block my-auto text-left">
+                        <a href="/" class="nav-link main-logo-link text-left">
+                            <h2 class=" logo-font text-color-pr mb-0  text-left"><strong> Concepto Interior</strong></h2>
+                        </a>
+                    </div>
+                    <!-- navbar  -->
+                    <div class=" col-6 col-sm-1 col-lg-4 my-auto text-left text-lg-center ">
+                        <nav class="navbar navbar-expand-lg navbar-light ">
+                            <button class="navbar-toggler toggler-custom " type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                                <div id="nav-icon">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </button>
+                            {% include 'includes/main-nav.html' %}           
+                        </nav> 
+                    </div>
+                    <!-- logo title up to lg screen  -->
+                    <div class="  col-3 d-none d-sm-block d-lg-none pl-5 ">
+                         <a href="/" class="nav-link main-logo-link ">
+                            <h2 class="logo-font text-color-pr mb-0 "><strong> Concepto Interior</strong></h2>
+                        </a> 
+                    </div>
+                    <!-- icons menu -->
+                    <div class=" col-6  offset-sm-2 offset-lg-0 col-lg-4 text-right  ">
+                        <li class="list-inline-item px-sm-1">
+                            <a class="text-black nav-link pr-0" href="#" id="mobile-search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="text-center">
+                                <div><i class="fas fa-search fa-lg"></i></div>
+                                <p class="my-0 d-none d-md-block">Search</p>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu border-0 w-100 p-3 rounded-0 my-0" aria-labelledby="mobile-search">
+                                <form class="form" method="GET" action="{% url 'products' %}">
+                                    <div class="input-group w-100">
+                                        <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search our site">
+                                        <div class="input-group-append">
+                                            <button class="form-control form-control btn btn-black border border-black rounded-0" type="submit">
+                                                <span class="icon">
+                                                    <i class=" fas fa-search"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        {% if request.user.is_superuser%}
+                        <li class="list-inline-item dropdown px-sm-1">
+                            <div class="nav-link px-2 text-color-pr">
+                                <div class="text-center">
+                                    <div>
+                                        <i class="fa fa-power-off fa-lg"></i>
+                                        <p class="my-0 text-sm d-none d-md-block">{{request.user.username}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-inline-item dropdown px-sm-1">
+                            <a class="nav-link px-2 {% if request.user.is_authenticated %} text-color-pr {% else %} text-black{% endif %}" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="text-center">
+                                    <div>
+                                        <i class="fas fa-user fa-lg"></i>
+                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                        <p class="my-0 text-sm d-none d-md-block">{{request.user.username}}</p>
+                                    {% else %}
+                                        <p class="my-0 text-sm d-none d-md-block">My Account</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                            <div class="dropdown-menu border-0" aria-labelledby="user-options">
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.is_superuser %}
+                                    {% else %}
+                                        <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">My Profile</a>
+                                        <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Logout</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'account_signup' %}" class="dropdown-item dropdown-item dropdown-item-pr">Register</a>
+                                    <a href="{% url 'account_login' %}" class="dropdown-item dropdown-item dropdown-item-pr">Login</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li class="list-inline-item px-sm-1">
+                            <a class="{% if grand_total %}text-color-pr font-weight-bold{% else %}text-black{% endif %} nav-link px-0  " href="{% if request.user.is_superuser %} {% url 'account_logout' %} {% else %} {% url 'view_bag' %} {% endif%}" >
+                                <div class="text-center">
+                                    {% if request.user.is_superuser %}
+                                        <div><i class="fas fa-sign-out-alt fa-lg"></i></div>
+                                        <p id="base-total" class="my-0 d-none d-md-block">
+                                            Logout
+                                        </p>
+                                    {% else%}
+                                        <div><i class="fas fa-shopping-bag fa-lg"></i></div>
+                                        <p id="base-total" class="my-0 d-none d-md-block">
+                                            {% if delivery_problem %}
+                                                &nbsp
+                                            {% elif grand_total %}
+                                                €{{ grand_total|floatformat:2 }}
+                                            {% else %}
+                                                €0.00
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </li>
+                    </div>               
+                </div>
+            </div>            
+        </div>
+        <div id="delivery-banner" class="row text-center">
+            <div class="col bg-black text-white ">
+                {% if request.user.is_superuser%}
+                    {% if today_orders_count == 0  and today_preorders_count == 0 %}
+                        <div class="logo-font my-1">Today, {{today|date}}, there was no order / preorder</div>
+                    {% else %}
+                        <div class="logo-font my-1">Today, {{today|date}}, you have received 
+                            {% if today_orders_count == 0 %}
+
+                            {% elif today_orders_count == 1 %}
+                                1 order
+                            {% else %}
+                                {{ today_orders_count}} orders
+                            {% endif %}
+                            {% if today_preorders_count == 0 %}
+                            {% elif today_preorders_count == 1 %}
+                                {% if today_orders_count != 0 %}
+                                    and
+                                {% endif%}
+                                1 preorder
+                            {% else %}
+                                {% if today_orders_count != 0 %}
+                                    and
+                                {% endif %}
+                                {{ today_preorders_count}} preorders
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                <div class="logo-font my-1">Free delivery to {% if ie_delivery %} Ireland{% else %}all EU{% endif %} on orders over €{{ free_delivery_threshold }}!</div>
+                {% endif %}              
+            </div>            
+        </div>
+    </header>
+    
+    {% if messages %}
+        <div class="message-container">
+             {% for message in messages %}
+                {% with message.level as level %}
+                    {% if level == 40 %}
+                        {% include 'includes/toasts/toast_error.html' %}
+                    {% elif level == 30 %}
+                        {% include 'includes/toasts/toast_warning.html' %}
+                    {% elif level == 25 %}
+                        {% include 'includes/toasts/toast_success.html' %}
+                    {% else %}
+                        {% include 'includes/toasts/toast_info.html' %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block page_header %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block postloadjs %}
+        <script>
+			$(document).ready(function() {
+                $('.toast').toast('show');
+
+                 // change chevron icon in menu
+                $('#areas-clickable').on("click", function() {
+                    $(this).children("i").toggleClass("fa-chevron-down fa-chevron-up");      
+                });
+                // change form of burger button - from https://codepen.io/designcouch/pen/Atyop
+                $('#nav-icon').on("click", function() {
+                    $(this).toggleClass('open');
+                    // give space to the expanded burger button
+                    $('.top-title').toggleClass("more-space-for-menu");
+                });
+
+			});
+        </script>
+    {% endblock %}
+
+  </body>
+</html>
