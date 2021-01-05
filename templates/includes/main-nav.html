@@ -1,0 +1,47 @@
+<div class="collapse navbar-collapse" id="main-nav">
+    <ul class="navbar-nav mt-3 w-auto mx-auto text-left text-lg-center">
+        {% if request.user.is_superuser %}
+            <li class="nav-item dropdown">
+                <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'products_management' %}" id="list-link">
+                    Orders
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'list_products' %}" id="list-link">
+                    Products
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'support' %}" id="support-link">
+                    IT Support
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item dropdown" id="areas">
+                <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="#" id="areas-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div id="areas-clickable">
+                        Areas 
+                        <i id="areas-icon"class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                </a>
+                <div class="dropdown-menu border-0" aria-labelledby="area-link">
+                    <a href="{% url 'products' %}?category=kitchen_living" class="dropdown-item dropdown-item-pr">Kitchen & Living room  </a>
+                    <a href="{% url 'products' %}?category=bathroom"class="dropdown-item dropdown-item-pr">Bathroom</a>
+                    <a href="{% url 'products' %}?category=bedroom" class="dropdown-item dropdown-item-pr">Bedroom</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'about' %}" id="about-link">
+                    About us
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="logo-font font-weight-bold nav-link text-black" href="{% url 'contact' %}" id="contact-link" >
+                    Contact
+                </a> 
+            </li>
+        {% endif %}
+
+    </ul>
+</div>
