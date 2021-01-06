@@ -1,0 +1,460 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: url('/media/background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    color: #555;
+    font-family: 'Muli', sans-serif;
+;
+}
+
+/* from Bulma */
+.icon {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    height: 1.5rem;
+    width: 0.5rem;
+}
+
+.logo-font {
+    text-transform: uppercase;
+    
+}
+
+.main-logo-link {
+    width: fit-content;
+}
+
+.shop-now-button {
+    background: black;
+    color: white;
+    min-width: 260px;
+}
+
+.btn-black {
+    background: black;
+    color: white;
+}
+
+.shop-now-button:hover,
+.shop-now-button:active,
+.shop-now-button:focus,
+.btn-black:hover,
+.btn-black:active,
+.btn-black:focus {
+    background: #222;
+    color: white;
+}
+
+.text-black {
+    color: #000 !important;
+}
+
+.border-black {
+    border: 1px solid black !important;
+}
+
+
+
+.overlay{
+    height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	background: white;
+	z-index: -1;
+}
+
+.opacity{
+    opacity: .2;
+}
+
+.switch-orders,
+.unauth-user-icon,
+.remove-item,
+.payment-option {
+    cursor: pointer;
+}
+
+.top-title,
+#area-link{
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+}
+
+.more-space-for-menu{
+    margin-top:15rem;
+}
+
+.not-available-banner{
+    position: absolute;
+    top: 40%;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: #f1089e;
+    font-weight: bolder;
+    font-size:x-large;
+    
+    
+}
+
+.card-products{
+    height: 80vw ;
+}
+
+/* ------------------------------- forms */
+.form-control{
+    border-radius:0;
+    border-color: black;
+}
+
+.form-grup{
+    color: black;
+}
+
+.form-control:focus {
+    border-color: "#f1089e" !important;
+    box-shadow: "none" !important;
+    outline: none !important;
+}
+
+/* Allauth form formatting */
+
+.allauth-form-inner-content p {
+    margin-top: 1.5rem; /* mt-4 */
+    color: #6c757d; /* text-secondary */
+}
+
+.allauth-form-inner-content input {
+    border-color: #000;
+    border-radius: 0;
+}
+
+.allauth-form-inner-content label:not([for='id_remember']) {
+    display: none;
+}
+
+.allauth-form-inner-content input::placeholder {
+    color: #aab7c4;
+}
+
+.allauth-form-inner-content button,
+.allauth-form-inner-content input[type='submit'] {
+	/* btn */
+	display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #000;
+    border: 1px solid #000;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0;
+
+    /* standard bootstrap btn transitions */
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.allauth-form-inner-content button:hover,
+.allauth-form-inner-content input[type='submit']:hover {	
+	color: #fff;
+    background-color: #222;
+    border-color: #222;
+}
+
+.allauth-form-inner-content a {
+	color: black;
+}
+
+/* ------------------------------- testing tools */
+.test{
+    background-color: yellowgreen;
+}
+.test2{
+    background-color: orange;
+}
+.test3{
+    background-color: blue;
+}
+
+
+
+/* ------------------------------- bootstrap toasts */
+
+.message-container {
+    position: fixed;
+    top: 85px;
+    right: 15px;
+    z-index: 99999999999;
+}
+
+.custom-toast {
+    overflow: visible;
+}
+
+.toast-capper {
+    height: 2px;
+}
+
+/* from CSS-tricks.com: https://css-tricks.com/snippets/css/css-triangle/ */
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent; 
+    border-bottom: 10px solid black;
+    position: absolute;
+    top: -10px;
+    right: 2px;
+}
+
+.bag-notification-wrapper {
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.checkout-notification-wrapper {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Black classes*/
+
+.text-black {
+    color: #000 !important;
+}
+
+.border-black {
+    border: 1px solid black !important;
+}
+
+.bg-black {
+    background: #000 !important;
+}
+
+/* Primary Color */
+
+.btn-outline-pr{
+    color: #f1089e !important;
+    border-color: #f1089e !important;
+    background-color:white!important;
+}
+
+.btn-outline-pr:hover{
+    color: white !important;
+    border-color: #f1089e !important;
+    background-color: #f1089e!important;
+}
+.btn-outline-pr:focus{
+    color: white;
+    border-color: #f1089e;
+    background-color: #f1089e;
+    box-shadow: none;
+}
+
+.bg-color-pr{
+    background: #f1089e;
+}
+
+.hr-color-pr{  
+    border-top: 1px solid #f1089e;
+}
+
+.text-color-pr{  
+    color: #f1089e;
+}
+
+.border-color-pr{  
+    border-color: #f1089e;
+}
+
+.dropdown-item-pr:focus{
+    background-color: #f1089e;
+}
+
+/* a */
+
+a:hover{
+    text-decoration: none;
+    color: #F833FF;
+}
+
+a {
+    color: #f1089e;
+}
+
+.toggler-custom{
+   border-style: none;
+}
+.toggler-custom:focus{
+   outline: none;
+}
+
+.order-modal{
+    font-size: .8rem
+}
+
+.modal-window-order {
+    z-index: 99999;
+}
+.incoming-modal{
+    z-index: 999999;
+}
+
+/* -------------------------------- nav icon 
+from https://codepen.io/designcouch/pen/Atyop */
+
+
+#nav-icon {
+  width: 60px;
+  height: 2rem;
+  position: relative;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: .5s ease-in-out;
+  -moz-transition: .5s ease-in-out;
+  -o-transition: .5s ease-in-out;
+  transition: .5s ease-in-out;
+  cursor: pointer;
+  z-index: 99;
+}
+
+#nav-icon span {
+  display: block;
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  background:  #f1089e;
+  border-radius: 0px;
+  opacity: 1;
+  left: 0;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: .25s ease-in-out;
+  -moz-transition: .25s ease-in-out;
+  -o-transition: .25s ease-in-out;
+  transition: .25s ease-in-out;
+}
+
+#nav-icon span:nth-child(1) {
+  top: 0px;
+  -webkit-transform-origin: left center;
+  -moz-transform-origin: left center;
+  -o-transform-origin: left center;
+  transform-origin: left center;
+}
+
+#nav-icon span:nth-child(2) {
+  top: 18px;
+  -webkit-transform-origin: left center;
+  -moz-transform-origin: left center;
+  -o-transform-origin: left center;
+  transform-origin: left center;
+}
+
+#nav-icon span:nth-child(3) {
+  top: 36px;
+  -webkit-transform-origin: left center;
+  -moz-transform-origin: left center;
+  -o-transform-origin: left center;
+  transform-origin: left center;
+}
+
+#nav-icon.open span:nth-child(1) {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  top: -3px;
+  left: 8px;
+}
+
+#nav-icon.open span:nth-child(2) {
+  width: 0%;
+  opacity: 0;
+}
+
+#nav-icon.open span:nth-child(3) {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  top: 39px;
+  left: 8px;
+}
+
+/* z-indexes for dropdown menu */
+
+#areas,
+#about-link,
+#contact-link {
+    z-index: 100;
+}
+/* -------------------------------- Media Queries */
+
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 80%;
+    }
+}
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    
+    .header-container {
+        padding-top: 164px;
+    }
+    body {
+    height: calc(100vh - 164px);
+   }
+}
+
+/* pad the top a bit when navbar is collapsed on mobile */
+@media (max-width: 991px) {
+    .header-container {
+        padding-top: 150px;
+    }
+
+    body {
+        height: calc(100vh - 150px);
+    }
+}
+/* setting height of pictures in relation to responsive grid width */
+
+@media only screen and (max-width: 992px) and (min-width: 576px)  {
+    .card-products {
+        height: 40vw
+    }     
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px)  {
+    .card-products {
+        height: 30vw
+    }     
+}
+@media only screen and (min-width: 1200px)  {
+    .card-products {
+        height: 20vw
+    }     
+}
