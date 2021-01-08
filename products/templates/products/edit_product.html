@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container-fluid" >
+        <div class="row">
+            <div class="col text-center mt-3 px-0">
+                <h2 class="logo-font top-title">Product Management</h2>
+                <div class="text-muted ">Edit "{{product.name}}"</div>
+                <hr class="w-75 mb-1 hr-color-pr">    
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-9 mx-auto px-0 ">
+                <form action="{% url 'edit_product' product.id %}" method="POST"  enctype='multipart/form-data' id="add-product-form">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                    <input type="hidden" name="from_management" value="{{ from_management }}">
+                </form>
+            </div>     
+        </div>
+        <div class="row">
+            <div class="col-9 mx-auto my-5">
+                <div class="row">
+                    <div class="col-6 col-md-2 px-0 ">
+                         <a href="{% url 'list_products' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100">
+                             <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                             </span>
+                            <span class="text-uppercase">Back to list</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2 offset-md-8 pr-0 text-right">
+                        <button type="submit" id="submit-button"form="add-product-form"class="btn btn-outline-pr rounded-0 mx-auto ">
+                            <span class="text-uppercase">Update </span>
+                            <span class="icon">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </button>
+                    </div>             
+                </div>
+            </div>   
+        </div>
+     </div>           
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container-fluid" >
+        <div class="row">
+            <div class="col text-center mt-3">
+                <h2 class=" top-title logo-font ">{{ product.name }}</h2>
+                <div class="text-muted ">€{{ product.price }}</div> 
+                {% if request.user.is_superuser %}
+                    <div class=" mx-2">
+                        <span> 
+                            <a href="" data-toggle="modal" data-target="#delete-product-{{product.id}}">
+                                <i class="fas fa-trash text-color-pr mx-2 " alt="delete"></i>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="{% url 'edit_product' product.id%}" >
+                                <i class="fas fa-pencil-alt text-color-pr mx-2" alt="edit"></i>
+                            </a>
+                        </span>
+                    </div>
+                    
+                {% endif %}
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="product-container col-10 offset-1">
+                <div class="row mt-1 mb-2"></div>
+                <div class="row  d-flex">
+                    <div class=" col-12 col-md-6 col-lg-4 offset-lg-2 ">
+                        <div class="image-container my-5  ">
+                            {% if product.image %}
+                                <a href="{{ product.image.url }}" target="_blank">
+                                    <img class="card-img-top img-fluid  " src="{{ product.image.url }}" alt="{{ product.name }}">
+                                </a>
+                            {% else %}
+                                <a href="">
+                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-1 ">
+                        <div class="product-details-container my-5">   
+                            <hr class="hr-color-pr mb-0">
+                            <p class=" mx-auto mt-2 pt-0 ">{{ product.description }}</p>
+                            <strong class="mt-5">Size:</strong>
+                            <ul>
+                                <li>High:{{product.h}} cms</li>
+                                <li>Wide:{{product.w}} cms</li>
+                                <li>Long:{{product.l}} cms</li>
+                            </ul>
+                            <small class="text-muted">
+                                <i class="fas fa-truck mr-1"></i>
+                                Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
+                            </small>
+                            {% if request.user.is_superuser%}
+                            {% else %}
+                                <div class="mt-5">
+                                    {% include 'products/includes/quantity_form.html' %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class=" mt-5">
+                                <a href="{% url 'products' %}" class=" btn btn-outline-pr rounded-0 btn-lg ">
+                                    <span class="icon">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="text-uppercase">Keep Shopping</span>
+                                </a>
+                            </div>
+                        </div>     
+                    </div>
+                                                       
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    {% include 'products/includes/modal_window.html' %}
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super}}
+{% include 'products/includes/quantity_input_script.html' %}
+{% endblock %}
