@@ -1,0 +1,203 @@
+<!-- order modal -->
+<div class="modal fade modal-window-order" id="order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title mx-auto order-modal">
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
+                        </p>
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}  
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">Order Date</div>
+                    <div class="col-6 text-small">{{ order.date }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Items</div>
+                    <div class="col-6 text-small">
+                        {% for item in order.lineitems.all %}
+                            <a  href="{% url 'product_details' item.product.id %}" target="_blank">{{ item.product.name }}</a>* {{ item.quantity }}, 
+                        {% endfor  %}                           
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Total</div>
+                    <div class="col-6 text-small">€ {{ order.order_total }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Delivery</div>
+                    <div class="col-6 text-small">€ {{ order.delivery_cost }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Grand Total</div>
+                    <div class="col-6 text-small">€ {{ order.grand_total }}</div>                   
+                </div>
+                <div class="row">
+                    <div class="col-6">Customer</div>
+                    <div class="col-6 text-small text-break">{{ order.full_name }}</div>
+                </div>            
+                <div class="row">
+                    <div class="col-6">Address</div>
+                    <div class="col-6 text-small">
+                        {{ order.street_address1 }}
+                        <br>
+                        {% if order.street_address2 == None %}
+                        {% else %}
+                            {{ order.street_address2 }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">County</div>
+                    <div class="col-6 text-small">
+                        {% if order.county == None %}
+                        {% else %}
+                            {{ order.county }}
+                        {% endif %}
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="col-6">Postal Code</div>
+                    <div class="col-6 text-small">
+                        {% if order.postcode == None %}
+                        {% else %}
+                            {{ order.postcode }}
+                        {% endif %}
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="col-6">Country</div>
+                    <div class="col-6 text-small">{{ order.country.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Phone Number</div>
+                    <div class="col-6 text-small">{{ order.phone_number }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Email address</div>
+                    <div class="col-6 text-small">{{ order.email }}</div>
+                </div>               
+                {% if order.shipped %}
+                    {% for delivery in order.delivery.all %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">Date of shipping</div>
+                        <div class="col-6 text-small">{{ delivery.date}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Tracking Code</div>
+                        <div class="col-6 text-small">{{ delivery.tracking_number }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Delivery company</div>
+                        <div class="col-6 text-small">{{ delivery.provider }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Expected delivery days</div>
+                        <div class="col-6 text-small">{{ delivery.expected_wait }}</div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <hr>  
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                {% if order.shipped %}
+                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#unship-order-{{order.id}}">
+                        Unship Order
+                    </a>
+                {% else %}
+                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#ship-order-{{order.id}}">
+                    Ship it !
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ship-order modal -->
+<div class="modal fade incoming-modal" id="ship-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="ship-order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title mx-auto order-modal">
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
+                        </p>
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'toggle_shipped' order.id %}" method="POST"  enctype='multipart/form-data' id="toggle-shipped-form-{{order.id}}">
+                    {% csrf_token %}
+                    {{ delivery_form | crispy}}
+                </form>
+                <p>Customer will be informed that order has been shipped via email.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                <button type="submit" id="submit-button" form="toggle-shipped-form-{{order.id}}" class="btn rounded-0 border-color-pr">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- unship-order modal -->
+<div class="modal fade incoming-modal" id="unship-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="ship-order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title mx-auto order-modal">
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
+                        </p>
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Something going wrong here ...</p>
+                <p>Customer has been previously informed that the order was shipped . If you click CONFIRM  customer will be informed via mail that there was a mistake: order has not been shipped yet.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                <a type="button" id="toggle-unshipped-form-{{order.id}}" href="{% url 'toggle_shipped' order.id %}" method="POST"  enctype='multipart/form-data' class="btn rounded-0 border-color-pr">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>

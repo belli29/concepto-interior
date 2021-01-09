@@ -1,0 +1,10 @@
+<script type="text/javascript">
+    $('.remove-product').click(function () { 
+        var itemId = $(this).data('product_id');
+        var url = `/products/delete/${itemId}`;
+        $.get(url)
+         .done(function() {
+             location.reload();
+        });
+    });
+</script>

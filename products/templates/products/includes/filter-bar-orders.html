@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center justify-content-md-about filter-bar my-lg-4">
+    <div class="text-center"> 
+        <a href="{% url 'products_management' %}">
+            <div id="switch-to-orders"class="{% if view_preorders %} opacity{% endif %} switch-orders badge badge-info bg-color-pr border-0">Orders </div>
+        </a>
+        <a href="{% url 'products_management' %}?view_preorders=true">
+            <div id="switch-to-preorders"class="{% if not view_preorders %} opacity{% endif %} switch-orders badge badge-info bg-color-pr border-0">Pre-orders </div>
+        </a>
+        {% if pay_pal_filter_active %}
+            <a href="{% url 'products_management' %}?{{current_param | cut:'pay_pal_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products_management' %}?pay_pal_filter=True&{{current_param}}">
+        {% endif %}
+            <div id="pay_pal_filter" class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not pay_pal_filter_active %}opacity{% endif %}"> PayPal orders</div>
+        </a>      
+        {% if shipped_filter_active %}
+            <a href="{% url 'products_management' %}?{{current_param | cut:'shipped_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products_management' %}?shipped_filter=True&{{current_param | cut:'unshipped_filter=True'}}">
+        {% endif %}
+            <div class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not shipped_filter_active %}opacity{% endif %}">Shipped</div>
+        </a>
+        {% if unshipped_filter_active %}
+            <a href="{% url 'products_management' %}?{{current_param | cut:'unshipped_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products_management' %}?unshipped_filter=True&{{current_param | cut:'shipped_filter=True'}}">
+        {% endif %}
+            <div class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not unshipped_filter_active %}opacity{% endif %}">To be shipped</div>
+        </a>
+        <span class="sort-select-wrapper ">
+            <select id="sort-selector" class="badge badge-info bg-color-pr border-0 ">
+                
+                <option value="date-desc" {% if current_sorting == 'date-desc' or current_sorting == 'None-None' %}selected{% endif %}>sort by: most recent</option>
+                <option value="date-asc" {% if current_sorting == 'date-asc' %}selected{% endif %}>sort by: oldest</option>
+                <option value="grand_total-desc" {% if current_sorting == 'grand_total-desc' %}selected{% endif %}>sort by: most expensive</option>
+                <option value="grand_total-asc" {% if current_sorting == 'grand_total-asc' %}selected{% endif %}>sort by: cheapest</option>
+            </select>
+        </span> 
+        {% if view_preorders %}
+        {% else %}
+            <a href="{% url 'products_management' %}">
+                <div class="badge badge-dark{% if shipped_filter_active or pay_pal_filter_active or unshipped_filter_active %} opacity{% endif %}">No filter</div>
+            </a>
+        {% endif %}        
+    </div> 
+</div>

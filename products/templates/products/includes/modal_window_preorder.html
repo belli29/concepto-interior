@@ -1,0 +1,139 @@
+<!-- preorder modal -->
+<div class="modal fade modal-window-order" id="preorder-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title order-modal mx-auto" >
+                {{order.order_number}}
+                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">Order Date</div>
+                    <div class="col-6 text-small">{{ order.date }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Items</div>
+                    <div class="col-6 text-small">
+                        {% for item in order.lineitems.all %}
+                            <a  href="{% url 'product_details' item.product.id %}" target="_blank">{{ item.product.name }}</a>* {{ item.quantity }}, 
+                        {% endfor  %}                           
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Total</div>
+                    <div class="col-6 text-small">€ {{ order.order_total }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Delivery</div>
+                    <div class="col-6 text-small">€ {{ order.delivery_cost }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Grand Total</div>
+                    <div class="col-6 text-small">€ {{ order.grand_total }}</div>                   
+                </div>
+                <div class="row">
+                    <div class="col-6">Customer</div>
+                    <div class="col-6 text-small text-break">{{ order.full_name }}</div>
+                </div>            
+                <div class="row">
+                    <div class="col-6">Address</div>
+                    <div class="col-6 text-small">
+                        {{ order.street_address1 }}
+                        <br>
+                        {% if order.street_address2 == None %}
+                        {% else %}
+                            {{ order.street_address2 }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">County</div>
+                    <div class="col-6 text-small">
+                        {% if order.county == None %}
+                        {% else %}
+                            {{ order.county }}
+                        {% endif %}
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="col-6">Postal Code</div>
+                    <div class="col-6 text-small">
+                        {% if order.postcode == None %}
+                        {% else %}
+                            {{ order.postcode }}
+                        {% endif %}
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="col-6">Country</div>
+                    <div class="col-6 text-small">{{ order.country.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Phone Number</div>
+                    <div class="col-6 text-small">{{ order.phone_number }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Email address</div>
+                    <div class="col-6 text-small">{{ order.email }}</div>
+                </div>      
+                <hr>  
+                <button type="button" class="btn btn-outline-dark rounded-0 mt-1 " data-dismiss="modal">Close</button>
+                <a href="" class="btn rounded-0 border-color-pr mt-1 " data-toggle="modal" data-target="#confirm-order-{{order.id}}">
+                    Upgrade to Order
+                </a>
+                <a href="" class="btn rounded-0 border-color-pr mt-1 " data-toggle="modal" data-target="#delete-order-{{order.id}}">
+                    Delete Preorder
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- upgrade to order modal -->
+<div class="modal fade incoming-modal" id="confirm-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title mx-auto order-modal">
+                {{order.order_number}}
+                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>You are about to create a new order </p>
+                <p>Enter the Pay Pal transaction code below</p>
+                <form action="{% url 'confirm_pre_order' order.order_number  %}" method="POST"  enctype='multipart/form-data' id="upgrade-preorder-form-{{order.id}}">
+                    {% csrf_token %}
+                    <input type="text" id="pp_transaction_id" name="pp_transaction_id" required>
+                </form>
+                <p class="mt-2">Customer will be informed that payment has been confirmed via email.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                <button type="submit" form="upgrade-preorder-form-{{order.id}}" class="btn rounded-0 border-color-pr">Yes, confirm it!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete preorder modal -->
+<div class="modal fade incoming-modal" id="delete-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="delete-order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title mx-auto order-modal">
+                {{order.order_number}}
+                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>You are about to delete this preorder </p>
+                <p>Customer will be informed that payment has not been received and preorder is not valid anymore</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                <button type="button" class="btn rounded-0 border-color-pr"><a href="{% url 'invalid_pre_order' order.order_number  %}" >Delete it!</a></button>
+            </div>
+        </div>
+    </div>
+</div>

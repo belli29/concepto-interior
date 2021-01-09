@@ -1,0 +1,61 @@
+<div id="orders-section"  class="col">
+    {% if orders.all %}
+        <div class="order-history table-responsive">
+            <table class="table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th class="d-none d-sm-table-cell">Date</th>
+                        <th class="d-none d-sm-table-cell">Items</th>
+                        <th class="d-none d-sm-table-cell">Order Total</th>
+                        <th>Shipped</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a href="" data-toggle="modal" data-target="#order-{{order.id}}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li class="small">
+                                            {{ item.product.name }}*{{ item.quantity }},
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td class="d-none d-sm-table-cell">
+                                € {{ order.grand_total }}
+                                {% if order.pay_pal_order%}
+                                    <p class="text-center">
+                                        <i class="fab fa-paypal text-color-pr text-center" aria-hidden="true"></i>
+                                    </p>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if order.shipped %}
+                                    <a href="" data-toggle="modal" data-target="#unship-order-{{order.id}}">
+                                        <i class="fas fa-check text-color-pr" alt="shipped"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="" data-toggle="modal" data-target="#ship-order-{{order.id}}">
+                                        <i class="fas fa-times text-black" alt="not-shipped"></i>
+                                    </a>
+                                {%endif%}
+                            </td>
+                        </tr>
+                        {% include 'products/includes/modal_window_order.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p> You have no orders at the moment</p>
+    {% endif %}
+</div>

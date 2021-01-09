@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-center justify-content-md-about filter-bar my-lg-4">
+    
+    <div class="text-center"> 
+        {% if euro_filter_active %}
+            <a href="{% url 'products' %}?{{current_param | cut:'euro_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products' %}?euro_filter=True&{{current_param}}">
+        {% endif %}
+            <div id="euro_filter" class="badge bg-color-pr badge-info {% if not euro_filter_active %}opacity{% endif %}"> Delivery to EU</div>
+        </a>      
+        {% if available_filter_active %}
+            <a href="{% url 'products' %}?{{current_param | cut:'available_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products' %}?available_filter=True&{{current_param}}">
+        {% endif %}
+            <div class="badge bg-color-pr badge-info {% if not available_filter_active %}opacity{% endif %}">Available</div>
+        </a> 
+        <a href="{% url 'products' %}">
+            <div class="badge badge-dark{% if euro_filter_active or available_filter_active or current_category != None %} opacity{% endif %}">All Products</div>
+        </a> 
+        <span class="sort-select-wrapper ">
+            <select id="sort-selector" class="badge badge-info bg-color-pr border-0 ">
+                <option value="price_asc" {% if current_sorting == 'price_asc' or current_sorting == 'None_None'  %}selected{% endif %}>sort by : cheapest</option>
+                <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>sort by : most expensive</option>
+                <option value="size_desc" {% if current_sorting == 'size_desc' %}selected{% endif %}>sort by : biggest size </option>
+                <option value="size_asc" {% if current_sorting == 'size_asc' %}selected{% endif %}>sort by : most compact</option>
+            </select>
+        </span>           
+    </div> 
+</div>
