@@ -159,3 +159,7 @@ STATIC_URL = '/static/'
 # Delivery variables
 
 FREE_DELIVERY_THRESHOLD = 1000
+
+# Required to use toasts
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
