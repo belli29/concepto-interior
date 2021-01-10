@@ -157,10 +157,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Delivery variables
 
-FREE_DELIVERY_THRESHOLD = 1000
+FREE_DELIVERY_TRESHOLD = 1000
+PAY_PAL_DISCOUNT = 97
 
 # Required to use toasts
 
