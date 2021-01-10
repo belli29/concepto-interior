@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'home',
     'products',
     'bag',
+    'checkout',
+    'profiles',
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

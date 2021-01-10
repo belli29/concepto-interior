@@ -237,4 +237,3 @@ class Delivery(models.Model):
 
     def __str__(self):
         return self.tracking_number
-

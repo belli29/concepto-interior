@@ -1,0 +1,48 @@
+<div id="orders-section"  class="col-12 col-md-6 ">
+    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
+    <div class="row">
+        <div class="col-4 text-left text-nowrap">
+            <div class="text-center badge badge-info bg-color-pr text-nowrap border-0">Orders</div>
+        </div>
+        <div class="col-4 offset-4  text-right text-nowrap">
+            <div id="switch-to-preorders"class="switch-orders badge badge-info bg-color-pr opacity border-0">Pre-orders </div>
+        </div>
+    </div>
+     {% if orders.all %}
+        <div class="order-history table-responsive">
+            <table class="table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th class="d-none d-sm-table-cell">Date</th>
+                        <th class="d-none d-sm-table-cell"> Order Total</th>
+                        <th>Shipped</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a href="" data-toggle="modal" data-target="#order-{{order.id}}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">€ {{ order.grand_total }}</td>
+                            <td>
+                                {% if order.shipped %}
+                                    <i class="fas fa-check text-color-pr" alt="shipped"></i> {{order.shipping_code|upper }}
+                                {% else %}
+                                    Pending
+                                {% endif %}   
+                            </td>
+                        </tr>
+                        {% include 'profiles/includes/modal_window_order.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center"> You have no orders at the moment</p>
+    {% endif %}
+</div>

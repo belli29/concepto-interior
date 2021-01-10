@@ -1,0 +1,82 @@
+<!-- preorder modal -->
+<div class="modal fade modal-window-order" id="preorder-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title order-modal mx-auto" >
+                {{order.order_number}}
+                <p><h6 class=" text-center text-color-pr">This is a preorder!</h6></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">Order Date</div>
+                    <div class="col-6 text-small">{{ order.date }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Items</div>
+                    <div class="col-6 text-small">
+                        {% for item in order.lineitems.all %}
+                            <a  href="{% url 'product_details' item.product.id %}" target="_blank">{{ item.product.name }}</a>* {{ item.quantity }}, 
+                        {% endfor  %}                           
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Total</div>
+                    <div class="col-6 text-small">€ {{ order.order_total }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Delivery</div>
+                    <div class="col-6 text-small">€ {{ order.delivery_cost }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Grand Total</div>
+                    <div class="col-6 text-small">€ {{ order.grand_total }}</div>                   
+                </div>
+                <div class="row">
+                    <div class="col-6">Customer</div>
+                    <div class="col-6 text-small text-break">{{ order.full_name }}</div>
+                </div>            
+                <div class="row">
+                    <div class="col-6">Address</div>
+                    <div class="col-6 text-small">
+                        {{ order.street_address1 }}
+                        <br>
+                        {% if order.street_address2 == None %}
+                        {% else %}
+                            {{ order.street_address2 }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">County</div>
+                    <div class="col-6 text-small">
+                        {% if order.county == None %}
+                        {% else %}
+                            {{ order.county }}
+                        {% endif %}
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="col-6">Postal Code</div>
+                    <div class="col-6 text-small">
+                        {% if order.postcode == None %}
+                        {% else %}
+                            {{ order.postcode }}
+                        {% endif %}
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="col-6">Country</div>
+                    <div class="col-6 text-small">{{ order.country.name }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Email</div>
+                    <div class="col-6 text-small">{{ order.email }}</div>
+                </div>
+                <hr>  
+                <button type="button" class="mx-auto btn btn-outline-dark rounded-0 mt-1 " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

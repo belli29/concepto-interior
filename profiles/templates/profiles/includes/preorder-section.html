@@ -1,0 +1,50 @@
+<div id="preorders-section" class="col-12 col-md-6 d-none">
+    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
+    <div class="row">
+        <div class="col-4 text-left text-nowrap">
+            <div id="switch-to-orders" class="switch-orders opacity badge badge-info bg-color-pr border-0">Orders </div>
+        </div>
+        <div class="col-4 offset-4 text-right text-nowrap">
+            <div class=" badge badge-info bg-color-pr border-0 text-nowrap">Pre-orders </div>
+        </div>
+    </div>
+     {% if preorders.all %}
+        <div class="order-history table-responsive">
+            <table class="table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th class="d-none d-sm-table-cell">Date</th>
+                        <th class="d-none d-sm-table-cell">Items</th>
+                        <th>Order Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in preorders %}
+                        <tr>
+                            <td>
+                                <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li class="small">
+                                            {{ item.product.name }}*{{ item.quantity }},
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>€ {{ order.grand_total }}</td>
+                        </tr>
+                        {% include 'profiles/includes/modal_window_preorder.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center"> You have no preorders at the moment</p>
+    {% endif %}
+</div>
