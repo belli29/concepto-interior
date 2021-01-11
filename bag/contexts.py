@@ -39,7 +39,7 @@ def bag_contents(request):
         })
 
     delivery = shipping_cost
-    free_delivery_delta = settings.FREE_DELIVERY_TRESHOLD - total
+    free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     grand_total =  total + shipping_cost
 
     # for seller banner
@@ -62,6 +62,7 @@ def bag_contents(request):
         'today': today,
         'today_orders_count': today_orders_count,
         'today_preorders_count': today_preorders_count,
+        'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
     }
 
     return context

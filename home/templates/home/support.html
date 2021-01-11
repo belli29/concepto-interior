@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <h2 class="top-title logo-font text-white text-center font-weight-bold">Contact me !</h2>
+    <p class="text-center lead text-white font-weight-bold">Have you found any bug? Do you have any suggestion? </p>
+    <p class="text-center lead text-white font-weight-bold">Let me know using the form below </p>
+    <form method="POST" id="support_form" class="text-center border-color-pr">
+        {% csrf_token %}
+        <textarea id="problem" name="problem" rows="20" cols="70">
+        </textarea>
+        <p>
+            <a href="{% url 'products_management' %}" class=" btn btn-outline-pr rounded-0  ">
+                 <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span class="text-uppercase">Come back</span>
+            </a>
+            <input type="submit" value="Submit" class=" btn btn-outline-pr rounded-0 mx-auto" >
+        </p>
+    </form>
+{% endblock %}

@@ -161,8 +161,15 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Delivery variables
 
-FREE_DELIVERY_TRESHOLD = 1000
+FREE_DELIVERY_THRESHOLD = 1000
 PAY_PAL_DISCOUNT = 97
+
+# Stripe
+
+STRIPE_CURRENCY = 'mxn'
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 
 # Required to use toasts
 
