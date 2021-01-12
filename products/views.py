@@ -8,8 +8,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .models import Product, Category
 from .forms import ProductForm
-#from checkout.models import Order, OrderLineItem, PreOrder, Delivery
-#from checkout.forms import DeliveryForm
+from checkout.models import Order, OrderLineItem, PreOrder, Delivery
+from checkout.forms import DeliveryForm
 
 
 def all_products(request):

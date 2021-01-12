@@ -17,7 +17,7 @@ def bag_contents(request):
         product = get_object_or_404(Product, pk=item_id)
         subtotal = quantity * product.price
         total += subtotal
-        shipping_cost += product.shipping_cost
+        shipping_cost += product.shipping_cost * quantity
         product_count += quantity
         remaining_qty = product.available_quantity - quantity
         """

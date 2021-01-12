@@ -14,7 +14,7 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].choices = friendly_names
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-0'
-        self.fields['image'].label = "Image" \
+        self.fields['image_one'].label = "Image" \
             " (please use pictures 500px*500px for better results)"
         self.fields['l'].label = "Long in cms"
         self.fields['h'].label = "High in cms"
