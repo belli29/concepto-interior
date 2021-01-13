@@ -34,8 +34,8 @@
                             <div class="card h-100 border-0">
                                 {% if product.available_quantity > 0 %}
                                     <a  href="{% url 'product_details' product.id %}">
-                                    {% if product.image %}
-                                        <img class="card-img-top img-fluid card-products" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    {% if product.image_one %}
+                                        <img class="card-img-top img-fluid card-products" src="{{ product.image_one.url }}" alt="{{ product.name }}">
                                     {% else %}
                                         <img class="card-img-top img-fluid card-products" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
                                     {% endif %}

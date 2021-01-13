@@ -40,9 +40,9 @@
                 <div class="row  d-flex">
                     <div class=" col-12 col-md-6 col-lg-4 offset-lg-2 ">
                         <div class="image-container my-5  ">
-                            {% if product.image %}
-                                <a href="{{ product.image.url }}" target="_blank">
-                                    <img class="card-img-top img-fluid  " src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% if product.image_one %}
+                                <a href="{{ product.image_one.url }}" target="_blank">
+                                    <img class="card-img-top img-fluid  " src="{{ product.image_one.url }}" alt="{{ product.name }}">
                                 </a>
                             {% else %}
                                 <a href="">
@@ -55,15 +55,15 @@
                         <div class="product-details-container my-5">   
                             <hr class="hr-color-pr mb-0">
                             <p class=" mx-auto mt-2 pt-0 ">{{ product.description }}</p>
-                            <strong class="mt-5">Size:</strong>
+                            <strong class="mt-5">Medidas:</strong>
                             <ul>
-                                <li>High:{{product.h}} cms</li>
-                                <li>Wide:{{product.w}} cms</li>
-                                <li>Long:{{product.l}} cms</li>
+                                <li>Alto:{{product.h}} cms</li>
+                                <li>Ancho:{{product.w}} cms</li>
+                                <li>Largo:{{product.l}} cms</li>
                             </ul>
                             <small class="text-muted">
                                 <i class="fas fa-truck mr-1"></i>
-                                Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
+                                Coste de envio $ {{shipping_cost}} por unidad
                             </small>
                             {% if request.user.is_superuser%}
                             {% else %}

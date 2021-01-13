@@ -81,9 +81,11 @@ def product_details(request, product_id):
         if str(product_id) in list(request.session.get("bag").keys()):
             bag_qty = request.session.get("bag")[str(product_id)]
     remaining_qty = product.available_quantity - bag_qty
+    shipping_cost = product.shipping_cost
     context = {
         'product': product,
-        'remaining_qty': remaining_qty
+        'remaining_qty': remaining_qty,
+        'shipping_cost': shipping_cost
     }
 
     return render(request, 'products/product_details.html', context)
