@@ -1,0 +1,11 @@
+<script type="text/javascript">
+
+    // changes picture upon click 
+    $('.carr').click(function(e) {
+       e.preventDefault();
+       var mainPic = $("#main-pic");
+       chosenImg = $(this).find('a').attr('href');
+       $("#main-pic").attr('href', chosenImg);
+       $("#main-pic").find('img').attr('src', chosenImg);
+    });
+</script>

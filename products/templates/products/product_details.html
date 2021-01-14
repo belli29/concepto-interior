@@ -40,15 +40,53 @@
                 <div class="row  d-flex">
                     <div class=" col-12 col-md-6 col-lg-4 offset-lg-2 ">
                         <div class="image-container my-5  ">
-                            {% if product.image_one %}
-                                <a href="{{ product.image_one.url }}" target="_blank">
-                                    <img class="card-img-top img-fluid  " src="{{ product.image_one.url }}" alt="{{ product.name }}">
-                                </a>
-                            {% else %}
-                                <a href="">
-                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                                </a>
-                            {% endif %}
+                            <div class="row mx-auto ">
+                                {% if product.image_one %}
+                                    <a id="main-pic" href="{{ product.image_one.url }}" target="_blank">
+                                        <img class="card-img-top img-fluid  " src="{{ product.image_one.url }}" alt="{{ product.name }}">
+                                    </a>
+                                {% else %}
+                                    <a href="">
+                                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                    </a>
+                                {% endif %}                              
+                            </div>
+                            <div class="row mt-3 mx-auto">
+                                <div class="col-4 carr" id="thumbnail_one">
+                                    {% if product.image_one %}
+                                        <a href="{{ product.image_one.url }}" target="_blank">
+                                            <img class="card-img-top img-fluid  " src="{{ product.image_one.url }}" alt="{{ product.name }}">
+                                        </a>
+                                    {% else %}
+                                        <a href="">
+                                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                        </a>
+                                    {% endif %} 
+                                </div>
+                                <div class="col-4 carr" id="thumbnail_two">
+                                    {% if product.image_two %}
+                                        <a href="{{ product.image_two.url }}" target="_blank">
+                                            <img class="card-img-top img-fluid  " src="{{ product.image_two.url }}" alt="{{ product.name }}">
+                                        </a>
+                                    {% else %}
+                                        <a href="">
+                                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                        </a>
+                                    {% endif %} 
+                                </div>
+                                <div class="col-4 carr" id="thumbnail_three">
+                                    {% if product.image_three %}
+                                        <a href="{{ product.image_three.url }}" target="_blank">
+                                            <img class="card-img-top img-fluid  " src="{{ product.image_three.url }}" alt="{{ product.name }}">
+                                        </a>
+                                    {% else %}
+                                        <a href="">
+                                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                        </a>
+                                    {% endif %}                                     
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 offset-lg-1 ">
@@ -95,4 +133,5 @@
 {% block postloadjs %}
 {{ block.super}}
 {% include 'products/includes/quantity_input_script.html' %}
+{% include 'products/includes/image_script.html' %}
 {% endblock %}
