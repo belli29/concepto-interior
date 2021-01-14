@@ -1,0 +1,39 @@
+<fieldset form="payment-form" class="px-3 ">
+    <legend class="fieldset-label text-black mx-3 w-auto text-center">Opciones de pago </legend>
+    <!-- stores user's payment choice -->
+    <input type="hidden" form="payment-form" id="payment-choice" name="payment-choice" value="">
+    <div class="row">
+        <div class="col-4 text-center payment-option" id="paypal-payment">
+            <i class="fa fa-cc-paypal fa-4x " aria-hidden="true"></i>
+            <span class="small d-block"> Con Descuento!</span>
+        </div>
+        <div class="col-4 text-center payment-option" id="stripe-payment" >
+            <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
+            <span class="small d-block"> Tarjeta </span>
+        </div>
+        <div class="col-4 text-center payment-option" id="oxxo-payment">
+            <i class="fa fa-store fa-4x" aria-hidden="true"></i>
+            <span class="small d-block"> Paga en un OXXO</span>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12 col-md-4 mx-auto" >
+            <p class="mx-auto d-none text-justify" id="paypal_p">
+            Buena eleccion!
+            Hace click en el botton de abajo para recibir la factura. Tendràs 3 dias de tiempo para pagarla de tu cuenta Paypal. 
+            </p>
+            <p class="mx-auto d-none text-justify" id="oxxo_p">
+            Buena eleccion!
+            Hace click en el botton de abajo para recibir el codigo QR para pagar en un Oxxo. 
+            </p>
+            <p class="mx-auto">
+                <!-- A Stripe card element will go here -->
+                <div class="mb-3 d-none" id="card-element"></div>
+                <!-- Used to display form errors -->
+                <div class="text-danger" id="card-errors" role="alert"></div>
+                 <!-- Pass the client secret to the view so we can get the payment intent id -->
+                <input type="hidden" form="payment-form"  value="{{ client_secret }}" name="client_secret">
+            </p>
+        </div>
+    </div>     
+</fieldset>

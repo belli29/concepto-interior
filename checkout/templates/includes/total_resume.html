@@ -1,0 +1,50 @@
+{% load checkout_tools %}
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td class="text-center" ></h6><strong>Precio:</strong></h6></td>
+                <td class="text-center"><h6><strong>${{ total|floatformat:2 }}</strong></h6></td>
+            </tr>
+            <tr>
+                <td class="text-center" ><h6><strong>Envio:</strong></h6></td>
+                <td class="text-center">
+                    <h6>
+                        <strong>
+                            {% if delivery == 0 %}
+                                <div class="text-color-pr">GRATIS !</div>
+                            {% else %}
+                                ${{ delivery|floatformat:2 }}
+                            {% endif %}
+                        </strong>
+                    </h6>
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-center " >
+                    <h4>
+                        <strong>Total:</strong>
+                        <p >
+                            <small class="paypal-total d-none">(Descuento PayPal)</small>
+                        </p>
+                    </h4>
+                </td>
+                <td class="text-center">
+                    <h4>
+                        <strong class="checkout-total">${{ grand_total|floatformat:2 }}</strong>
+                        <p >
+                            <strong class="paypal-total d-none">${{ grand_total|calc_discount:discount |floatformat:2 }}</strong>
+                        </p>
+                    </h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {% if free_delivery_delta != 0%}
+                        <p class="text-color-pr text-center">
+                            (Envio gratuito si compras <strong>${{ free_delivery_delta }}</strong> mas!)
+                        </p>
+                    {% endif %}
+                </td>
+            </tr>              
+        </tbody>
+    </table> 

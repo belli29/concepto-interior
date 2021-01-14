@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load checkout_tools %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
@@ -18,40 +19,72 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3 px-0">
-                {% if not from_profile or not from_management %}
-                    <h2 class="top-title logo-font">Thank you!</h2>
-                    <div class="text-muted ">
-                        Your order information is below. A confirmation email will be sent to <strong>{{ order.email }}</strong>.
-                    </div>
-                {% endif %}
-                <hr class="w-75 mb-1 hr-color-pr px-0">    
+                <h2 class="top-title logo-font">Casi Estamos!</h2>
+                <div class="text-muted ">Dejanos tus detalles para completar el orden</div>
+                <hr class="w-75 mb-1 hr-color-pr">    
             </div>
         </div>
         <div class="row ">
             <div class="col-9 mx-auto px-0 ">
                 <div class="row mt-1 mb-2"></div>
                 <div class="row" >
-                    <div class="col-12 col-md-9 mx-auto jumbotron">
-                        {% include 'includes/checkout_success_order.html' %}
+                    <div class="col-12 col-md-9 payment-form-top">
+                        <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+                            {% csrf_token %}
+                            {% include 'includes/details_delivery_fieldsets.html' %}
+                        </form>
                     </div>
+                    <div class="d-none d-md-block col-md-3 payment-form-top" id="payment-bag">
+                        {% include 'includes/payment_bag.html' %}
+                    </div> 
                 </div>
-                <hr class="w-100 mb-5 hr-color-pr">                                   
+                <hr class="w-100 mb-5 hr-color-pr"> 
+                <div class="row">
+                    <div class="col-12 col-md-9 mx-auto jumbotron">
+                        {% include 'includes/total_resume.html' %}
+                    </div>
+                    <div class="col-12 col-md-9 mx-auto">
+                        {% include 'includes/payment_methods_fieldset.html' %}       
+                    </div>
+                </div>                                     
             </div>          
         </div>
         <div class="row">
             <div class="col-9 mx-auto my-5">
                 <div class="row">
-                    <div class="col-12 px-0 ">
-                        <a href="{% url 'products' %}" class="btn btn-outline-pr rounded-0 mx-auto">
-                            <span class="icon mr-2">
-                                <i class=" fas fa-chevron-left"></i>
-                            </span>
-                            <span class="text-uppercase">Keep shopping</span>
-                        </a>           
+                    <div class="col-6 col-md-2 px-0 ">
+                         <a href="{% url 'view_bag' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100">
+                             <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                             </span>
+                            <span class="text-uppercase">Atrás</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-2 offset-md-8 pr-0 text-right">
+                        <button type="submit" id="submit-button"form="payment-form"class="d-none btn btn-outline-pr rounded-0 mx-auto"></button>
                     </div>             
                 </div>
             </div>   
         </div>
     </div>
     
+    <div id="loading-overlay">
+        <h1 class="text-light logo-font loading-spinner">
+            <span class="icon">
+                <i class="fas fa-3x fa-circle-notch fa-spin"></i>
+            </span>
+        </h1>
+    </div>
+    <!-- to be used by the js module attached -->
+    <div id="change_country" class="d-none">{{change_country}}</div>
+        
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super}}
+    <script src="{% static 'checkout/js/payment_choice.js' %}"></script>
+    <!-- Stripe scripts -->
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}

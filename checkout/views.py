@@ -116,14 +116,6 @@ def checkout(request):
 
         # check if there is some delivery problem
         context = bag_contents(request)
-        delivery_problem = context["delivery_problem"]
-        if delivery_problem:
-            messages.error(
-                request, "Some items in your bag cannot be delivered"
-                "to your shipping destination."
-                "Go back to you bag and delete them"
-                "or change your shipping address to Ireland."
-            )
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
         bag = request.session.get('bag', {})
