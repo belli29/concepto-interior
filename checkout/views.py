@@ -107,14 +107,6 @@ def checkout(request):
 
     # GET request
     else:
-        change_country = False
-        # check if user amended the country
-        if "country" in request.GET:
-            change_country = True
-            chosen_country = request.session.get('chosen_country')
-            request.session['chosen_country'] = request.GET['country']
-
-        # check if there is some delivery problem
         context = bag_contents(request)
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -134,47 +126,30 @@ def checkout(request):
         )
         client_secret = intent.client_secret
         # generate form
-        # request comes from change country
-        if change_country:
-            new_data = request.GET
-            order_form = OrderForm({
-                    'full_name': new_data['full_name'],
-                    'email': new_data['email'],
-                    'phone_number': new_data['phone_number'],
-                    'country': new_data['country'],
-                    'postcode': new_data['postcode'],
-                    'town_or_city': new_data['town_or_city'],
-                    'street_address1': new_data['street_address1'],
-                    'street_address2': new_data['street_address2'],
-                    'county': new_data['county'],
+        if request.user.is_authenticated:
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                order_form = OrderForm(initial={
+                    'full_name': profile.user.get_full_name(),
+                    'email': profile.user.email,
+                    'phone_number': profile.default_phone_number,
+                    'country': profile.default_country,
+                    'postcode': profile.default_postcode,
+                    'town_or_city': profile.default_town_or_city,
+                    'street_address1': profile.default_street_address1,
+                    'street_address2': profile.default_street_address2,
+                    'county': profile.default_county,
                 })
-        # request does not come from change country
-        else:
-            if request.user.is_authenticated:
-                try:
-                    profile = UserProfile.objects.get(user=request.user)
-                    order_form = OrderForm(initial={
-                        'full_name': profile.user.get_full_name(),
-                        'email': profile.user.email,
-                        'phone_number': profile.default_phone_number,
-                        'country': profile.default_country,
-                        'postcode': profile.default_postcode,
-                        'town_or_city': profile.default_town_or_city,
-                        'street_address1': profile.default_street_address1,
-                        'street_address2': profile.default_street_address2,
-                        'county': profile.default_county,
-                    })
-                except UserProfile.DoesNotExist:
-                    order_form = OrderForm()
-            else:
+            except UserProfile.DoesNotExist:
                 order_form = OrderForm()
+        else:
+            order_form = OrderForm()
 
         template = 'checkout/checkout.html'
         context = {
             'order_form': order_form,
             'stripe_public_key': stripe_public_key,
-            'client_secret':  client_secret,
-            'change_country': change_country,
+            'client_secret':  client_secret
             }
         return render(request, template, context)
 
