@@ -66,7 +66,7 @@ class Order(models.Model):
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = self.lineitems.aggregate(
                 Sum('lineitem_delivery')
-                )['lineitem_delivery__sum']
+                )['lineitem_delivery__sum'] or 0
         else:
             self.delivery_cost = 0
         self.grand_total = self.order_total + self.delivery_cost
@@ -170,7 +170,7 @@ class PreOrder(models.Model):
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = self.lineitems.aggregate(
                 Sum('lineitem_delivery')
-                )['lineitem_delivery__sum']
+                )['lineitem_delivery__sum'] or 0
         else:
             self.delivery_cost = 0
         self.total = self.order_total + self.delivery_cost
@@ -197,7 +197,7 @@ class PreOrderLineItem(models.Model):
     product = models.ForeignKey(Product, null=False,
                                 blank=False, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
-    delivery_cost = models.DecimalField(max_digits=6, decimal_places=2,
+    lineitem_delivery = models.DecimalField(max_digits=6, decimal_places=2,
                                         null=False, default=0)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2,
                                          null=False,
