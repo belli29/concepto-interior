@@ -63,18 +63,12 @@ class Order(models.Model):
         self.order_total = self.lineitems.aggregate(
             Sum('lineitem_total')
             )['lineitem_total__sum'] or 0
-        if self.country == 'IE':
-            if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * \
-                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE / 100
-            else:
-                self.delivery_cost = 0
+        if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
+            self.delivery_cost = self.lineitems.aggregate(
+                Sum('lineitem_delivery')
+                )['lineitem_delivery__sum']
         else:
-            if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * \
-                    settings.STANDARD_DELIVERY_PERCENTAGE/100
-            else:
-                self.delivery_cost = 0
+            self.delivery_cost = 0
         self.grand_total = self.order_total + self.delivery_cost
         self.save()
 
@@ -101,6 +95,9 @@ class OrderLineItem(models.Model):
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2,
                                          null=False, blank=False,
                                          editable=False)
+    lineitem_delivery = models.DecimalField(max_digits=6, decimal_places=2,
+                                         null=False, blank=False,
+                                         editable=False, default=0)
 
     def save(self, *args, **kwargs):
         """
@@ -108,6 +105,7 @@ class OrderLineItem(models.Model):
         and update the order total.
         """
         self.lineitem_total = self.product.price * self.quantity
+        self.lineitem_delivery = self.product.shipping_cost * self.quantity
         super().save(*args, **kwargs)
 
     def __str__(self):
