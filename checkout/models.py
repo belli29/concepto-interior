@@ -167,18 +167,12 @@ class PreOrder(models.Model):
         """
         self.order_total = self.lineitems.aggregate(
             Sum('lineitem_total'))['lineitem_total__sum'] or 0
-        if self.country == 'IE':
-            if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_ie = settings.IRL_STANDARD_DELIVERY_PERCENTAGE
-                self.delivery_cost = self.order_total * self.delivery_ie / 100
-            else:
-                self.delivery_cost = 0
+        if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
+            self.delivery_cost = self.lineitems.aggregate(
+                Sum('lineitem_delivery')
+                )['lineitem_delivery__sum']
         else:
-            if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery = settings.STANDARD_DELIVERY_PERCENTAGE
-                self.delivery_cost = self.order_total * self.delivery / 100
-            else:
-                self.delivery_cost = 0
+            self.delivery_cost = 0
         self.total = self.order_total + self.delivery_cost
         self.grand_total = self.total * settings.PAY_PAL_DISCOUNT / 100
         self.save()
@@ -203,6 +197,8 @@ class PreOrderLineItem(models.Model):
     product = models.ForeignKey(Product, null=False,
                                 blank=False, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
+    delivery_cost = models.DecimalField(max_digits=6, decimal_places=2,
+                                        null=False, default=0)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2,
                                          null=False,
                                          blank=False, editable=False)
@@ -213,6 +209,7 @@ class PreOrderLineItem(models.Model):
         and update the order total.
         """
         self.lineitem_total = self.product.price * self.quantity
+        self.lineitem_delivery = self.product.shipping_cost * self.quantity
         super().save(*args, **kwargs)
 
     def __str__(self):
