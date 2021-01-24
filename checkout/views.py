@@ -120,10 +120,18 @@ def checkout(request):
         # Stripe intent
         stripe_total = round(grand_total*100)
         stripe.api_key = stripe_secret_key
-        intent = stripe.PaymentIntent.create(
-            amount=stripe_total,
-            currency=settings.STRIPE_CURRENCY,
-        )
+        try:
+            request.GET['stripe-payment'] == "oxxo"
+            intent = stripe.PaymentIntent.create(
+                    amount=stripe_total,
+                    currency=settings.STRIPE_CURRENCY,
+                    payment_method_types=['oxxo']
+                )
+        except:
+            intent = stripe.PaymentIntent.create(
+                amount=stripe_total,
+                currency=settings.STRIPE_CURRENCY,
+            )
         client_secret = intent.client_secret
         # generate form
         if request.user.is_authenticated:
@@ -225,6 +233,20 @@ def cache_checkout_data(request):
         messages.error(request, "There was something wrong with your payment.\
             Please try later")
         return HttpResponse(status=400)
+
+@require_POST
+def create_payment_intent_oxxo(request):
+    """
+    amends the payment method to Oxxo
+    """
+    pid = request.POST.get('client_secret').split('_secret')[0]
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    intent = stripe.PaymentIntent.create(
+    amount=1099,
+    currency='mxn',
+    payment_method_types=['oxxo']
+    )
+    return HttpResponse(status=200)
 
 
 def invoice_confirmation(request, pre_order_number):

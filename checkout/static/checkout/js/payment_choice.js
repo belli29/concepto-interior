@@ -22,13 +22,15 @@ $('#oxxo-payment').click(function () {
     $("#oxxo_p").removeClass("d-none");// remove oxxo payment info
     $("#card-element,#card-errors").addClass("d-none");// remove Stripe cc field
     $("#submit-button").removeClass("d-none").html("<span class='text-uppercase'> Recibe codigo QR </span><span class='icon'><i class='fas fa-chevron-right'></i></span>");
+    var url ='/checkout/';
+    var data = { "payment-method" : "oxxo"};
+    $.get(url, data);
 });
 // Stripe payment
 $('#stripe-payment').click(function () { 
     // call view to create stripe intent
     var url = "/checkout/";
-    var data = { "payment-choice" : "stripe"};
-    $.get(url,data);
+    $.get(url);
     $("#payment-choice").val("stripe"); // alter value of payment-choice form field
     $(".paypal-total").addClass("d-none");// hide discounted total
     $(".checkout-total").css("text-decoration", "none");// total unbarred 
