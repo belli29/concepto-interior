@@ -22,9 +22,25 @@
             Buena eleccion!
             Hace click en el botton de abajo para recibir la factura. Tendràs 3 dias de tiempo para pagarla de tu cuenta Paypal. 
             </p>
-            <p class="mx-auto d-none text-justify" id="oxxo_p">
-            Buena eleccion!
-            Hace click en el botton de abajo para recibir el codigo QR para pagar en un Oxxo. 
+            <p class="mx-auto">
+                <form id="payment-form" class="d-none">
+                    <div class="form-row ">
+                        <label for="name">
+                        Name
+                        </label>
+                        <input id="name" name="name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="email">
+                        Email
+                        </label>
+                        <input id="email" name="email" required>
+                    </div>
+
+                    <!-- Used to display form errors. -->
+                    <div id="error-message" role="alert"></div>
+                </form>
             </p>
             <p class="mx-auto">
                 <!-- A Stripe card element will go here -->
