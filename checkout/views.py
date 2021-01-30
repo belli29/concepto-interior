@@ -39,7 +39,7 @@ def checkout(request):
             'county': request.POST['county'],
         }
         # stripe
-        if payment_choice == "stripe":
+        if payment_choice == "stripe" or payment_choice == "oxxo" :
             # validate form
             order_form = OrderForm(form_data)
             if order_form.is_valid():
@@ -120,18 +120,11 @@ def checkout(request):
         # Stripe intent
         stripe_total = round(grand_total*100)
         stripe.api_key = stripe_secret_key
-        try:
-            request.GET['stripe-payment'] == "oxxo"
-            intent = stripe.PaymentIntent.create(
-                    amount=stripe_total,
-                    currency=settings.STRIPE_CURRENCY,
-                    payment_method_types=['oxxo']
-                )
-        except:
-            intent = stripe.PaymentIntent.create(
-                amount=stripe_total,
-                currency=settings.STRIPE_CURRENCY,
-            )
+        intent = stripe.PaymentIntent.create(
+            amount=stripe_total,
+            currency=settings.STRIPE_CURRENCY,
+            payment_method_types=['card', 'oxxo']
+        )
         client_secret = intent.client_secret
         # generate form
         if request.user.is_authenticated:

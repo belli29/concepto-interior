@@ -109,15 +109,15 @@ form.addEventListener('submit', function(ev) {
                 //reloads the page, error message triggered by view will be displayed
                 location.reload();
             })             
-        }else{
+        }else{ // when user wants to pay by oxxo
             $.post(url, postData).done( function (){
                 stripe.confirmOxxoPayment(
                     clientSecret,
                     {
                         payment_method: {
                         billing_details: {
-                            name: document.getElementById('name').value,
-                            email: document.getElementById('email').value,
+                            name: document.getElementById('oxxo_name').value,
+                            email: document.getElementById('oxxo_email').value,
                             },
                         },
                     }
@@ -129,5 +129,7 @@ form.addEventListener('submit', function(ev) {
                     errorMsg.innerText = result.error.message;
                     }
                 });
-            });    
-        }
+            });
+        };
+    };
+});

@@ -22,26 +22,28 @@
             Buena eleccion!
             Hace click en el botton de abajo para recibir la factura. Tendràs 3 dias de tiempo para pagarla de tu cuenta Paypal. 
             </p>
+            <!-- Oxxo form-->
             <p class="mx-auto">
                 <form id="payment-form" class="d-none">
                     <div class="form-row ">
                         <label for="name">
                         Name
                         </label>
-                        <input id="name" name="name" required>
+                        <input id="oxxo_name" name="name" required>
                     </div>
 
                     <div class="form-row">
                         <label for="email">
                         Email
                         </label>
-                        <input id="email" name="email" required>
+                        <input id="oxxo_email" name="email" required>
                     </div>
 
                     <!-- Used to display form errors. -->
                     <div id="error-message" role="alert"></div>
                 </form>
             </p>
+            <!-- card form-->
             <p class="mx-auto">
                 <!-- A Stripe card element will go here -->
                 <div class="mb-3 d-none" id="card-element"></div>
