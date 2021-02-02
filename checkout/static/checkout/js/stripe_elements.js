@@ -87,6 +87,7 @@ form.addEventListener('submit', function(ev) {
                     }
                 }
                 }).then(function(result) {
+                    console.log("go1")
                     if (result.error) {
                         var errorDiv = document.getElementById('card-errors');
                         var html = `
@@ -101,6 +102,7 @@ form.addEventListener('submit', function(ev) {
                         $('#submit-button').attr('disabled', false);
                     } else {
                         if (result.paymentIntent.status === 'succeeded') {
+                            console.log("go2")
                             form.submit();
                         }
                     }
@@ -110,7 +112,9 @@ form.addEventListener('submit', function(ev) {
                 location.reload();
             })             
         }else{ // when user wants to pay by oxxo
+            console.log("here0")
             $.post(url, postData).done( function (){
+                console.log("here1");
                 stripe.confirmOxxoPayment(
                     clientSecret,
                     {
@@ -120,14 +124,18 @@ form.addEventListener('submit', function(ev) {
                             email: document.getElementById('oxxo_email').value,
                             },
                         },
-                    }
-                ).then(function(result) {
-                    // This promise resolves when the customer closes the modal
-                    if (result.error){
+                    })
+                .then(function(result) {
+                // This promise resolves when the customer closes the modal
+                console.log("here2");
+                if (result.error){
                     // Display error to your customer
                     var errorMsg = document.getElementById('error-message');
                     errorMsg.innerText = result.error.message;
-                    }
+                }else{
+                    console.log("here3");
+                    form.submit();                    
+                }
                 });
             });
         };
