@@ -6,8 +6,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from .forms import OrderForm, PreOrderForm
-from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem
+from .forms import OrderForm, PreOrderForm, OxxoOrderForm
+from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem, OxxoOrder, OxxoOrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
 from profiles.models import UserProfile
@@ -39,9 +39,12 @@ def checkout(request):
             'county': request.POST['county'],
         }
         # stripe
-        if payment_choice == "stripe" or payment_choice == "oxxo" :
+        if payment_choice == "stripe" or payment_choice == "oxxo":
             # validate form
-            order_form = OrderForm(form_data)
+            if payment_choice == "stripe":
+                order_form = OrderForm(form_data)
+            else:
+                order_form = OxxoOrderForm(form_data)
             if order_form.is_valid():
                 order = order_form.save()
                 # add pid and original bag to order
@@ -52,11 +55,18 @@ def checkout(request):
                 for item_id, item_quantity in bag.items():
                     try:
                         product = Product.objects.get(id=item_id)
-                        order_line_item = OrderLineItem(
-                                    order=order,
-                                    product=product,
-                                    quantity=item_quantity,
-                                )
+                        if payment_choice == "stripe":
+                            order_line_item = OrderLineItem(
+                                        order=order,
+                                        product=product,
+                                        quantity=item_quantity,
+                                    )
+                        else:
+                            order_line_item = OxxoOrderLineItem(
+                                        order=order,
+                                        product=product,
+                                        quantity=item_quantity,
+                                    )
                         order_line_item.save()
                     except Product.DoesNotExist:
                         messages.error(request, (
@@ -71,7 +81,7 @@ def checkout(request):
                     Please double check your information.')
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(
-                reverse('checkout_success', args=[order.order_number])
+                reverse('checkout_success', args=[payment_choice, order.order_number])
             )
         # paypal
         if payment_choice == 'paypal':
@@ -155,13 +165,17 @@ def checkout(request):
         return render(request, template, context)
 
 
-def checkout_success(request, order_number):
+def checkout_success(request, order_number, payment_method):
     """
     Handle successful checkouts for
-    Stripe payments
+    Stripe orders or Oxxo orders
     """
     save_info = request.session.get('save_info')
-    order = get_object_or_404(Order, order_number=order_number)
+    if payment_method == "stripe":
+        order = get_object_or_404(Order, order_number=order_number)
+    else:
+        order = get_object_or_404(OxxoOrder, order_number=order_number)
+
     # Attach the user's profile to the order if user is authenticated
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
@@ -182,9 +196,8 @@ def checkout_success(request, order_number):
         if user_profile_form.is_valid():
             user_profile_form.save()
 
-    messages.success(request, f'Order successfully processed! \
-        Your order number is {order_number}. A confirmation \
-        email will be sent to {order.email}.')
+    messages.success(request, f'Tu numero de confirmacion es  {order_number}.\
+        Te hemos mandado la confirmacion a  {order.email}.')
     # save session bag info to a bag variable
     bag = request.session['bag']
     bag_with_item_name = []

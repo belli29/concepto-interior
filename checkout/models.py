@@ -222,6 +222,7 @@ class OxxoOrder(models.Model):
                                           null=True, blank=True,
                                           default=None,
                                           related_name='oxxoOrder')
+    original_bag = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(
         max_length=254,
         null=False,
