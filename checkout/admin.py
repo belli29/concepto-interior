@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Order, OrderLineItem
 from .models import PreOrder, PreOrderLineItem
+from .models import OxxoOrder, OxxoOrderLineItem
 from .models import Delivery
 
 
@@ -62,6 +63,36 @@ class PreOrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PreOrder, PreOrderAdmin)
+
+# oxxo order
+class OxxoOrderLineItemAdminInline(admin.TabularInline):
+    model = OxxoOrderLineItem
+    readonly_fields = ('lineitem_total',)
+
+
+class OxxoOrderAdmin(admin.ModelAdmin):
+    inlines = (OxxoOrderLineItemAdminInline,)
+
+    readonly_fields = ('order_number', 'date',
+                       'delivery_cost', 'order_total',
+                       'grand_total', 'upgraded_order',
+                       'stripe_pid')
+
+    fields = ('order_number', 'upgraded_order', 'status',
+              'user_profile', 'date', 'full_name',
+              'email', 'phone_number', 'country',
+              'postcode', 'town_or_city', 'street_address1',
+              'street_address2', 'county', 'delivery_cost',
+              'order_total', 'grand_total',)
+
+    list_display = ('order_number', 'date', 'full_name',
+                    'order_total', 'delivery_cost',
+                    'grand_total', 'status',)
+
+    ordering = ('-date',)
+
+
+admin.site.register(OxxoOrder, OxxoOrderAdmin)
 
 # delivery
 
