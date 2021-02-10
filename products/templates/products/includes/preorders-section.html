@@ -4,16 +4,18 @@
             <table class="table table-sm table-borderless">
                 <thead>
                     <tr>
-                        <th>Order Number</th>
-                        <th class="d-none d-sm-table-cell">Date</th>
-                        <th class="d-none d-sm-table-cell">Items</th>
-                        <th class="d-none d-sm-table-cell">Order Total</th>
-                        <th >Status</th>
+                        <th>Tipo de pago</th>
+                        <th>Codigo</th>
+                        <th class="d-none d-sm-table-cell">Fecha</th>
+                        <th class="d-none d-sm-table-cell">Productos</th>
+                        <th class="d-none d-sm-table-cell">Total</th>
+                        <th >Estado</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in preorders %}
                         <tr>
+                            <td> <i class="fab fa-paypal"></i></td>
                             <td>
                                 <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
                                     {{ order.order_number|truncatechars:6 }}
@@ -31,7 +33,7 @@
                             </td>
                             <td class="d-none d-sm-table-cell">€ {{ order.grand_total }}</td>
                             <td>
-                                <span>Pending</span>
+                                <span>Pendiente</span>
                                 <span>
                                     <a href="" data-toggle="modal" data-target="#confirm-order-{{order.id}}">
                                         <i class="fas fa-level-up-alt"></i>
@@ -40,6 +42,31 @@
                                         <i class="fas fa-level-down-alt"></i>
                                     </a>                                    
                                 </span>
+                            </td>
+                        </tr>
+                        {% include 'products/includes/modal_window_preorder.html' %}
+                    {% endfor %}
+                    {% for order in oxxo_orders %}
+                        <tr>
+                            <td> Oxxo </td>
+                            <td>
+                                <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li class="small">
+                                            {{ item.product.name }}*{{ item.quantity }},
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td class="d-none d-sm-table-cell">€ {{ order.grand_total }}</td>
+                            <td>
+                                <span>Pendiente</span>
                             </td>
                         </tr>
                         {% include 'products/includes/modal_window_preorder.html' %}

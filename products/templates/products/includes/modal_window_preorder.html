@@ -5,16 +5,16 @@
             <div class="modal-header">
                 <div class="modal-title order-modal mx-auto" >
                 {{order.order_number}}
-                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                <p><h6 class="text-color-pr">Orden no confirmado!</h6></p>
                 </div>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-6">Order Date</div>
+                    <div class="col-6">Fecha</div>
                     <div class="col-6 text-small">{{ order.date }}</div>
                 </div>
                 <div class="row">
-                    <div class="col-6">Items</div>
+                    <div class="col-6">Productos</div>
                     <div class="col-6 text-small">
                         {% for item in order.lineitems.all %}
                             <a  href="{% url 'product_details' item.product.id %}" target="_blank">{{ item.product.name }}</a>* {{ item.quantity }}, 
@@ -80,12 +80,14 @@
                 </div>      
                 <hr>  
                 <button type="button" class="btn btn-outline-dark rounded-0 mt-1 " data-dismiss="modal">Close</button>
+                {% if not order.stripe_pid %}
                 <a href="" class="btn rounded-0 border-color-pr mt-1 " data-toggle="modal" data-target="#confirm-order-{{order.id}}">
                     Upgrade to Order
                 </a>
                 <a href="" class="btn rounded-0 border-color-pr mt-1 " data-toggle="modal" data-target="#delete-order-{{order.id}}">
                     Delete Preorder
                 </a>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -161,28 +161,21 @@
         <div id="delivery-banner" class="row text-center">
             <div class="col bg-black text-white ">
                 {% if request.user.is_superuser%}
-                    {% if today_orders_count == 0  and today_preorders_count == 0 %}
-                        <div class="logo-font my-1">Today, {{today|date}}, there was no order / preorder</div>
+                    {% if today_orders_count == 0  and today_preorders_count == 0 and today_oxxo_orders_count == 0  %}
+                        <div class="logo-font my-1">Hoy, {{today|date}}, ho hubo ordenes</div>
                     {% else %}
-                        <div class="logo-font my-1">Today, {{today|date}}, you have received 
+                        <div class="logo-font my-1">Hoy, {{today|date}}, recibiste
                             {% if today_orders_count == 0 %}
-
-                            {% elif today_orders_count == 1 %}
-                                1 order
                             {% else %}
-                                {{ today_orders_count}} orders
+                                {{ today_orders_count}} ordenes
                             {% endif %}
                             {% if today_preorders_count == 0 %}
-                            {% elif today_preorders_count == 1 %}
-                                {% if today_orders_count != 0 %}
-                                    and
-                                {% endif%}
-                                1 preorder
                             {% else %}
-                                {% if today_orders_count != 0 %}
-                                    and
-                                {% endif %}
-                                {{ today_preorders_count}} preorders
+                                {{ today_preorders_count}} preordenes por Paypal
+                            {% endif %}
+                            {% if today_oxxo_orders_count == 0 %}
+                            {% else %}
+                                {{ today_oxxo_orders_count}} preordenes con pago OXXO
                             {% endif %}
                         </div>
                     {% endif %}

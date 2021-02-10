@@ -2,7 +2,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
-from checkout.models import Order, PreOrder
+from checkout.models import Order, PreOrder, OxxoOrder
 from django.utils import timezone
 from django.utils.timezone import localdate
 
@@ -48,8 +48,11 @@ def bag_contents(request):
         date__gte=today)
     today_preorders = PreOrder.objects.all().filter(
         date__gte=today)
+    today_oxxo_orders = OxxoOrder.objects.all().filter(
+        date__gte=today)
     today_orders_count = len(today_orders)
     today_preorders_count = len(today_preorders)
+    today_oxxo_orders_count = len(today_oxxo_orders)
 
     context = {
         'bag_items': bag_items,
@@ -62,6 +65,7 @@ def bag_contents(request):
         'today': today,
         'today_orders_count': today_orders_count,
         'today_preorders_count': today_preorders_count,
+        'today_oxxo_orders_count': today_oxxo_orders_count,
         'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
     }
 

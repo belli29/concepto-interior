@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .models import Product, Category
 from .forms import ProductForm
-from checkout.models import Order, OrderLineItem, PreOrder, Delivery
+from checkout.models import Order, OrderLineItem, PreOrder, OxxoOrder, Delivery
 from checkout.forms import DeliveryForm
 
 
@@ -102,11 +102,11 @@ def management(request):
         return redirect(reverse('home'))
     # orders section
     delivery_form = DeliveryForm()
-    orders = Order.objects.all()
-    orders = orders.order_by("-date")
+    orders = Order.objects.all().order_by("-date")
     preorders = PreOrder.objects.all()
     preorders = preorders.exclude(status="INV").exclude(status="UPG")
     preorders = preorders.order_by("-date")
+    oxxo_orders = OxxoOrder.objects.all().order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
     unshipped_filter = False
@@ -139,12 +139,14 @@ def management(request):
             if direction == 'desc':
                 sortkey = f'-{sortkey}'
         orders = orders.order_by(sortkey)
-        preorders = orders.order_by(sortkey)
+        preorders = preorders.order_by(sortkey)
+        oxxo_orders = oxxo_orders.order_by(sortkey)
     current_sorting = f'{sort}-{direction}'
     context = {
         'view_preorders': view_preorders,
         'orders': orders,
         'preorders': preorders,
+        'oxxo_orders': oxxo_orders,
         'pay_pal_filter_active': pay_pal_filter,
         'shipped_filter_active': shipped_filter,
         'unshipped_filter_active': unshipped_filter,
