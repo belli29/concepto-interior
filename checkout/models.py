@@ -42,6 +42,7 @@ class Order(models.Model):
         default=''
         )
     shipped = models.BooleanField(default=False)
+    oxxo = models.BooleanField(default=False)
     pp_transaction_id = models.CharField(
         max_length=254,
         null=False,

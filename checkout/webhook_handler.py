@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from .models import Order, OrderLineItem
+from .models import Order, OrderLineItem, OxxoOrder, OxxoOrderLineItem
 from products.models import Product
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -9,7 +9,7 @@ from profiles.models import UserProfile
 import json
 import time
 
-
+breakpoint
 class StripeWH_Handler:
     """Handle Stripe webhooks"""
 
@@ -32,7 +32,6 @@ class StripeWH_Handler:
             settings.DEFAULT_FROM_EMAIL,
             [cust_email]
         )
-
     def handle_event(self, event):
         """
         Handle a generic/unknown/unexpected webhook event
@@ -41,20 +40,71 @@ class StripeWH_Handler:
             content=f'Unhandled webhook received: {event["type"]}',
             status=200)
 
-    def handle_payment_intent_succeeded(self, event):
+    def handle_payment_intent_succeeded_or_requires_action(self, event):
         """
-        Handle the payment_intent.succeeded webhook from Stripe
+        Handle the payment_intent.succeeded and payment_intent.requires_action webhook from Stripe
         """
-
+        if event.type == 'payment_intent.requires_action':
+            payment_confirmed = False
+        else:
+            payment_confirmed = True
         # fetching relevant Stripe event details
         intent = event.data.object
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
-        billing_details = intent.charges.data[0].billing_details
+        if payment_confirmed:
+            billing_details = intent.charges.data[0].billing_details
         shipping_details = intent.shipping
-        grand_total = round((intent.charges.data[0].amount / 100), 2)
-
+        if payment_confirmed:
+            grand_total = round((intent.charges.data[0].amount / 100), 2)
+        else:
+            grand_total = round((intent.amount / 100), 2)
+        # if payment confirmation for oxxo payment
+        if payment_confirmed and intent.payment_method_details.type == 'oxxo':
+            oxxo_order = OxxoOrder.objects.get(
+                stripe_pid=pid
+                )
+            # update oxxo order status
+            oxxo_order.status = 'UPG'
+            oxxo_order.save()
+            # create new order connected
+            order = Order(
+                    user_profile=oxxo_order.user_profile,
+                    full_name=oxxo_order.full_name,
+                    email=oxxo_order.email,
+                    phone_number=oxxo_order.phone_number,
+                    country=oxxo_order.country,
+                    postcode=oxxo_order.postcode,
+                    town_or_city=oxxo_order.town_or_city,
+                    street_address1=oxxo_order.street_address1,
+                    street_address2=oxxo_order.street_address2,
+                    county=oxxo_order.county,
+                    delivery_cost=oxxo_order.delivery_cost,
+                    order_total=oxxo_order.order_total,
+                    grand_total=oxxo_order.grand_total,
+                    oxxo=True
+                )
+            order.save()
+            # copy line items from oxxo order to order
+            for li in oxxo_order.lineitems.all():
+                oxxo_order_line_item = OxxoOrderLineItem(
+                    order=order,
+                    product=li.product,
+                    quantity=li.quantity,
+                )
+                oxxo_order_line_item .save()
+            # update product reserved, sold
+            product = li.product
+            quantity = li.quantity
+            product.sold = product.sold + quantity
+            product.reserved = product.reserved - quantity
+            product.save()
+            return HttpResponse(
+                content=f'Webhook received: {event["type"]}'
+                ' | SUCCESS: Oxxo Order paid by customer',
+                status=200
+                )
         # clean data in the shipping details
         for field, value in shipping_details.address.items():
             if value == "":
@@ -62,14 +112,16 @@ class StripeWH_Handler:
 
         # update available quantity and sold quantity of products
         bag_dict = json.loads(bag)
-        for p, quantity_purchased in bag_dict.items():
+        for p, quantity in bag_dict.items():
+            print(quantity)
             product = get_object_or_404(Product, pk=p)
-            initial_quantity = product.available_quantity
-            initial_sold = product.sold
-            sold = initial_sold + quantity_purchased
-            available_quantity = initial_quantity - quantity_purchased
-            product.available_quantity = available_quantity
-            product.sold = sold
+            print(product.available_quantity)
+            print(product.reserved)
+            if payment_confirmed:
+                product.sold = product.sold + quantity
+            else:
+                product.reserved = product.reserved + quantity
+            product.available_quantity = product.available_quantity - quantity
             product.save()
 
         # Update profile information if save_info was checked
@@ -96,66 +148,92 @@ class StripeWH_Handler:
                     shipping_details.address.state
                 )
                 profile.save()
-
         # check if order exist
         order_exists = False
         attempt = 1
         while attempt <= 5:
             try:
-                order = Order.objects.get(
-                    full_name__iexact=shipping_details.name,
-                    email__iexact=billing_details.email,
-                    phone_number__iexact=shipping_details.phone,
-                    country__iexact=shipping_details.address.country,
-                    postcode__iexact=shipping_details.address.postal_code,
-                    town_or_city__iexact=shipping_details.address.city,
-                    street_address1__iexact=shipping_details.address.line1,
-                    street_address2__iexact=shipping_details.address.line2,
-                    county__iexact=shipping_details.address.state,
-                    grand_total=grand_total,
-                    original_bag=bag,
-                    stripe_pid=pid,
-                )
+                if payment_confirmed:
+                    order = Order.objects.get(
+                        stripe_pid=pid,
+                    )
+                else:
+                    order = OxxoOrder.objects.get(
+                        stripe_pid=pid
+                    )
                 order_exists = True
                 break
-            except Order.DoesNotExist:
+            except OxxoOrder.DoesNotExist:
                 attempt += 1
                 time.sleep(1)
         # order exists
         if order_exists:
             print("order exists!")
-            self._send_confirmation_email(order)
-            return HttpResponse(
-                content=f'Webhook received: {event["type"]}'
-                ' | SUCCESS: Verified order already in database',
-                status=200
-                )
+            if payment_confirmed:
+                self._send_confirmation_email(order)
+                return HttpResponse(
+                    content=f'Webhook received: {event["type"]}'
+                    ' | SUCCESS: Verified order already in database',
+                    status=200
+                    )
+            else:
+                return HttpResponse(
+                    content=f'Webhook received: {event["type"]}'
+                    ' | SUCCESS: Verified Oxxo order already in database',
+                    status=200
+                    )
+
         # order does not exists
         else:
             order = None
             try:
-                order = Order.objects.create(
-                    full_name=shipping_details.name,
-                    user_profile=profile,
-                    email=billing_details.email,
-                    phone_number=shipping_details.phone,
-                    country=shipping_details.address.country,
-                    postcode=shipping_details.address.postal_code,
-                    town_or_city=shipping_details.address.city,
-                    street_address1=shipping_details.address.line1,
-                    street_address2=shipping_details.address.line2,
-                    county=shipping_details.address.state,
-                    original_bag=bag,
-                    stripe_pid=pid,
-                )
-                for item_id, item_data in json.loads(bag).items():
-                    product = Product.objects.get(id=item_id)
-                    order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            quantity=item_data,
-                        )
-                    order_line_item.save()
+                if payment_confirmed:
+                    order = Order.objects.create(
+                        full_name=shipping_details.name,
+                        user_profile=profile,
+                        email=billing_details.email,
+                        phone_number=shipping_details.phone,
+                        country=shipping_details.address.country,
+                        postcode=shipping_details.address.postal_code,
+                        town_or_city=shipping_details.address.city,
+                        street_address1=shipping_details.address.line1,
+                        street_address2=shipping_details.address.line2,
+                        county=shipping_details.address.state,
+                        original_bag=bag,
+                        stripe_pid=pid,
+                    )
+                    for item_id, item_data in json.loads(bag).items():
+                        product = Product.objects.get(id=item_id)
+                        order_line_item = OrderLineItem(
+                                order=order,
+                                product=product,
+                                quantity=item_data,
+                            )
+                        order_line_item.save()
+                else:
+                    order = OxxoOrder.objects.create(
+                        full_name=shipping_details.name,
+                        user_profile=profile,
+                        email=intent.receipt_email,
+                        phone_number=shipping_details.phone,
+                        country=shipping_details.address.country,
+                        postcode=shipping_details.address.postal_code,
+                        town_or_city=shipping_details.address.city,
+                        street_address1=shipping_details.address.line1,
+                        street_address2=shipping_details.address.line2,
+                        county=shipping_details.address.state,
+                        original_bag=bag,
+                        stripe_pid=pid,
+                    )
+                    for item_id, item_data in json.loads(bag).items():
+                        product = Product.objects.get(id=item_id)
+                        order_line_item = OxxoOrderLineItem(
+                                order=order,
+                                product=product,
+                                quantity=item_data,
+                            )
+                        order_line_item.save()
+
             except Exception as e:
                 if order:
                     order.delete()

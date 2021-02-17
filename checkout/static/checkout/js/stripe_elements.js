@@ -119,19 +119,36 @@ form.addEventListener('submit', function(ev) {
                     clientSecret,
                     {
                         payment_method: {
-                        billing_details: {
-                            name: document.getElementById('oxxo_name').value,
-                            email: document.getElementById('oxxo_email').value,
-                            },
+                            billing_details: {
+                                name: $.trim(form.full_name.value),
+                                email: $.trim(form.email.value),
+                            }
                         },
+                        shipping: {
+                            name: $.trim(form.full_name.value),
+                            phone: $.trim(form.phone_number.value),
+                            address: {
+                                line1: $.trim(form.street_address1.value),
+                                line2: $.trim(form.street_address2.value),
+                                city: $.trim(form.town_or_city.value),
+                                country: $.trim(form.country.value),
+                                postal_code: $.trim(form.postcode.value),
+                                state: $.trim(form.county.value),
+                            }
+                        },
+                        receipt_email: $.trim(form.email.value)
                     })
                 .then(function(result) {
                 // This promise resolves when the customer closes the modal
                 console.log("here2");
                 if (result.error){
                     // Display error to your customer
-                    var errorMsg = document.getElementById('error-message');
+                    var errorMsg = document.getElementById('oxxo-error-message');
                     errorMsg.innerText = result.error.message;
+                    console.log(" error should be displayed")
+                    $('#loading-overlay').fadeToggle(100);
+                    $('#submit-button').attr('disabled', false);
+                    $('#payment-form').fadeToggle(100);
                 }else{
                     console.log("here3");
                     form.submit();                    
