@@ -46,9 +46,15 @@ def checkout(request):
             else:
                 order_form = OxxoOrderForm(form_data)
             if order_form.is_valid():
-                order = order_form.save()
-                # add pid and original bag to order
                 pid = request.POST.get('client_secret').split('_secret')[0]
+                #avoid order duplication if user does leave the oxxo voucher modal open for too long
+                if payment_choice == "oxxo":
+                    try:
+                        #order already created by Webhook
+                        order = OxxoOrder.objects.get(stripe_pid=pid)
+                    except OxxoOrder.DoesNotExist:
+                        order = order_form.save()
+                # add pid and original bag to order
                 order.stripe_pid = pid
                 order.original_bag = json.dumps(bag)
                 # add line items to order
