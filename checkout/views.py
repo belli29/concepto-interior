@@ -54,6 +54,8 @@ def checkout(request):
                         order = OxxoOrder.objects.get(stripe_pid=pid)
                     except OxxoOrder.DoesNotExist:
                         order = order_form.save()
+                else:
+                    order = order_form.save() 
                 # add pid and original bag to order
                 order.stripe_pid = pid
                 order.original_bag = json.dumps(bag)

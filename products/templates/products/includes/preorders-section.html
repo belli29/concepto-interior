@@ -1,5 +1,5 @@
 <div id="preorders-section" class="col">
-     {% if preorders.all %}
+     {% if preorders.all or oxxo_orders.all %}
         <div class="order-history table-responsive">
             <table class="table table-sm table-borderless">
                 <thead>
@@ -75,6 +75,6 @@
             </table>
         </div>
     {% else %}
-        <p> You have no orders at the moment</p>
+        <p> No tienes reservas en espera de ser confirmadas</p>
     {% endif %}
 </div>

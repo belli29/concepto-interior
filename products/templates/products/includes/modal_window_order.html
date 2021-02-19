@@ -5,18 +5,27 @@
             <div class="modal-header">
                 <div class="modal-title mx-auto order-modal">
                     {{order.order_number}}
-                    {% if order.stripe_pid != "" %}
+                    {% if order.payment == "CC" %}
                         <p class="text-color-pr">
                             <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
                             {{ order.stripe_pid }}
                         </p>
                     {% else %}
                         <p class="text-color-pr">
-                            This order procedes from a preorder made on<br>
-                            {{order.preorder.date}}
+                            Esta order procede de una reserva echa el <br>
+                            {% if order.payment == "PP"%}
+                                {{order.preorder.date}}
+                            {% elif order.payment == "OXXO" %}
+                                {{order.oxxoorder.date}}
+                            {% endif%}
                             <p class="text-color-pr">
-                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
-                                {{ order.pp_transaction_id }}
+                                {% if order.payment == "PP"%}
+                                    <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                    {{ order.pp_transaction_id }}
+                                {% elif order.payment == "OXXO" %}
+                                    <i class="fa fa-qrcode fa-2x" aria-hidden="true"></i>
+                                    {{ order.stripe_pid }}
+                                {% endif %}
                             </p>
                         </p>
                     {% endif %}  

@@ -198,7 +198,6 @@ class StripeWH_Handler:
             )
             # update oxxo order status
             oxxo_order.status = 'UPG'
-            oxxo_order.save()
             # create new order connected
             order = Order(
                     user_profile=oxxo_order.user_profile,
@@ -218,9 +217,11 @@ class StripeWH_Handler:
                     payment='OXXO'
                 )
             order.save()
+            oxxo_order.upgraded_order = order
+            oxxo_order.save()
             # copy line items from oxxo order to order
-            for li in order.lineitems.all():
-                order_line_item = OxxoOrderLineItem(
+            for li in oxxo_order.lineitems.all():
+                order_line_item = OrderLineItem(
                     order=order,
                     product=li.product,
                     quantity=li.quantity,

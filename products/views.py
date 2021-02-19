@@ -106,7 +106,9 @@ def management(request):
     preorders = PreOrder.objects.all()
     preorders = preorders.exclude(status="INV").exclude(status="UPG")
     preorders = preorders.order_by("-date")
-    oxxo_orders = OxxoOrder.objects.all().order_by("-date")
+    oxxo_orders = OxxoOrder.objects.all()
+    oxxo_orders = oxxo_orders.exclude(status="INV").exclude(status="UPG")
+    oxxo_orders = oxxo_orders.order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
     unshipped_filter = False

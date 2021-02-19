@@ -16,9 +16,19 @@
                     {% for order in orders %}
                         <tr>
                             <td>
-                                <a href="" data-toggle="modal" data-target="#order-{{order.id}}">
-                                    {{ order.order_number|truncatechars:6 }}
-                                </a>
+                                <p class="text-color-pr">
+                                    {% if order.payment == "PP"%}
+                                        <i class="fa fa-cc-paypal fa-lg" aria-hidden="true"></i>
+                                    {% elif order.payment == "CC"%}
+                                        <i class="fa fa-credit-card fa-lg" aria-hidden="true"></i>
+                                    {% elif order.payment == "OXXO"%}
+                                        <i class="fa fa-qrcode fa-lg" aria-hidden="true"></i>
+                                    {% endif %}
+                                    <a href="" data-toggle="modal" data-target="#order-{{order.id}}">
+                                        {{ order.order_number|truncatechars:6 }}
+                                    </a>
+                                </p>
+
                             </td>
                             <td class="d-none d-sm-table-cell">{{ order.date }}</td>
                             <td class="d-none d-sm-table-cell">

@@ -231,7 +231,7 @@ class OxxoOrder(models.Model):
     upgraded_order = models.OneToOneField(Order, on_delete=models.SET_NULL,
                                           null=True, blank=True,
                                           default=None,
-                                          related_name='oxxoOrder')
+                                          related_name='oxxoorder')
     original_bag = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(
         max_length=254,
