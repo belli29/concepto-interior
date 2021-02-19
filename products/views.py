@@ -295,7 +295,8 @@ def confirm_pre_order(request, order_number):
         delivery_cost=pre_order.delivery_cost,
         order_total=pre_order.order_total,
         grand_total=pre_order.grand_total,
-        pp_transaction_id=pp_transaction_id
+        pp_transaction_id=pp_transaction_id,
+        payment='PP'
     )
     # save order
     order.save()

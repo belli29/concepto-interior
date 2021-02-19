@@ -214,7 +214,8 @@ class StripeWH_Handler:
                     delivery_cost=oxxo_order.delivery_cost,
                     order_total=oxxo_order.order_total,
                     grand_total=oxxo_order.grand_total,
-                    oxxo=True
+                    stripe_pid=pid,
+                    payment='OXXO'
                 )
             order.save()
             # copy line items from oxxo order to order

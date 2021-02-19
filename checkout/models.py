@@ -42,13 +42,22 @@ class Order(models.Model):
         default=''
         )
     shipped = models.BooleanField(default=False)
-    oxxo = models.BooleanField(default=False)
     pp_transaction_id = models.CharField(
         max_length=254,
         null=False,
         blank=False,
         default=''
         )
+    PAYMENT_CHOICES = [
+        ('CC', 'Credit card'),
+        ('OXXO', 'Oxxo voucher'),
+        ('PP', 'PayPal'),
+    ]
+    payment = models.CharField(max_length=9,
+                              choices=PAYMENT_CHOICES,
+                              default="CC",
+                              null=False,
+                              blank=False)
 
     def _generate_order_number(self):
         """
