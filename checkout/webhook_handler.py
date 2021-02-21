@@ -9,22 +9,30 @@ from profiles.models import UserProfile
 import json
 import time
 
-breakpoint
 class StripeWH_Handler:
     """Handle Stripe webhooks"""
 
     def __init__(self, request):
         self.request = request
 
-    def _send_confirmation_email(self, order):
+    def _send_confirmation_email(self, order, action):
         """Send the user a confirmation email"""
         cust_email = order.email
-        subject = render_to_string(
-            'checkout/confirmation_emails/confirmation_email_subject.txt',
-            {'order': order})
+        if action == 'cc' or 'oxxo_upgraded':
+            subject = render_to_string(
+                'checkout/confirmation_emails/confirmation_email_subject_confirmed.txt',
+                {'order': order})
+        elif action == 'oxxo_created':
+            subject = render_to_string(
+                'checkout/confirmation_emails/confirmation_email_subject_qr.txt',
+                {'order': order})
+        elif action == 'oxxo_deleted':
+            subject = render_to_string(
+                'checkout/confirmation_emails/confirmation_email_subject_qr_expired.txt',
+                {'order': order})
         body = render_to_string(
             'checkout/confirmation_emails/confirmation_email_body.txt',
-            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'action': action})
 
         send_mail(
             subject,
@@ -50,7 +58,7 @@ class StripeWH_Handler:
             if action == 'confirm':
                 product.sold = product.sold + quantity
                 product.available_quantity = product.available_quantity - quantity
-            elif action == 'oxxo_reserve':
+            elif action == 'oxxo_created':
                 product.reserved = product.reserved + quantity
                 product.available_quantity = product.available_quantity - quantity
             elif action == 'oxxo_upgrade':
@@ -68,18 +76,21 @@ class StripeWH_Handler:
         # check if order exists
         order = None
         attempt = 1
-        while attempt <= 10:
+        while attempt <= 5:
             try:
                 if event_type == "payment_intent.succeeded":
                     order = Order.objects.get(
                         stripe_pid=pid,
                     )
                 else:
-                    order = OxxoOrder.objects.get(    
-                        stripe_pid=pid
+                    order = OxxoOrder.objects.get(
+                        stripe_pid=pid,
                     )
                 break
             except OxxoOrder.DoesNotExist:
+                attempt += 1
+                time.sleep(1)
+            except Order.DoesNotExist:
                 attempt += 1
                 time.sleep(1)
         return order
@@ -130,10 +141,10 @@ class StripeWH_Handler:
                     shipping_details.address.state
                 )
                 profile.save()
-        self._update_product_quantity(bag, 'oxxo_reserve')
+        self._update_product_quantity(bag, 'oxxo_created')
         order = self._check_if_order_exist(pid, event_type)
         if order is not None:
-            self._send_confirmation_email(order)
+            self._send_confirmation_email(order, 'oxxo_created')
             return HttpResponse(
                 content=f'Webhook received: {event_type}'
                 ' | SUCCESS: Verified order already in database',
@@ -170,7 +181,7 @@ class StripeWH_Handler:
                 return HttpResponse(
                     content=f'Webhook received: {event_type} | ERROR: {e}',
                     status=500)
-            self._send_confirmation_email(order)
+            self._send_confirmation_email(order,'oxxo_created')
             return HttpResponse(
                 content=f'Webhook received: {event_type}'
                 ' | SUCCESS: Created order in webhook',
@@ -192,7 +203,7 @@ class StripeWH_Handler:
         grand_total = round((intent.charges.data[0].amount / 100), 2)
         # if payment confirmation for oxxo payment
         
-        if intent.receipt_email is not None :
+        if intent.receipt_email is not None:
             oxxo_order = OxxoOrder.objects.get(
                 stripe_pid=pid
             )
@@ -262,7 +273,7 @@ class StripeWH_Handler:
         order = self._check_if_order_exist(pid, event_type)
         # order exists
         if order is not None:
-            self._send_confirmation_email(order)
+            self._send_confirmation_email(order, 'cc')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
                 ' | SUCCESS: Verified order already in database',
@@ -298,7 +309,7 @@ class StripeWH_Handler:
                 return HttpResponse(
                     content=f'Webhook received: {event["type"]} | ERROR: {e}',
                     status=500)
-            self._send_confirmation_email(order)
+            self._send_confirmation_email(order, 'cc')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
                 ' | SUCCESS: Created order in webhook',
@@ -322,6 +333,7 @@ class StripeWH_Handler:
         order.status = "INV"
         self._update_product_quantity(bag, 'oxxo_delete')
         order.save()
+        self._send_confirmation_email(order, 'oxxo_deleted')
         return HttpResponse(
             content=f'Webhook received: {order.order_number} deleted: user could  not pay on time Oxxo voucher',
             status=200)

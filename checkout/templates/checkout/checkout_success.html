@@ -19,9 +19,16 @@
         <div class="row">
             <div class="col text-center mt-3 px-0">
                 {% if not from_profile or not from_management %}
-                    <h2 class="top-title logo-font">Thank you!</h2>
+                    <h2 class="top-title logo-font">Gracias por tu orden!</h2>
                     <div class="text-muted ">
-                        Your order information is below. A confirmation email will be sent to <strong>{{ order.email }}</strong>.
+                        {% if payment == 'stripe'%}
+                        Tu orden està confirmada.
+                        <br>
+                        En los proximos dias enviaremos tus productos a la direccion indicada
+                        {% elif payment == 'oxxo'%}
+                        Puedes pagar por ella en cualquier Oxxo en los proximos 3 dias.
+                        Procesaremos el envio en cuanto recibamos el pago
+                        {% endif %}   
                     </div>
                 {% endif %}
                 <hr class="w-75 mb-1 hr-color-pr px-0">    

@@ -2,16 +2,16 @@
     <table class="table table-borderless table-sm mw-100 text-wrap">
         <tbody>
             <tr>
-                <td class="text-center d-none d-md-block" ><strong>Order Number</strong></td>
+                <td class="text-center d-none d-md-block" ><strong>Confirmación</strong></td>
                 <td class="text-left text-md-center text-wrap confirmation-number">{{ order.order_number }}</td>
             </tr>
             <tr>
-                <td class="text-center d-none d-md-block" ><strong>Order Date</strong></td>
+                <td class="text-center d-none d-md-block" ><strong>Fecha</strong></td>
                 <td class="text-left text-md-center ">{{ order.date }}</td>
             </tr>
 
             <tr>
-                <td class="text-center d-none d-md-block"><strong>Your order</strong></td>
+                <td class="text-center d-none d-md-block"><strong>Tu pedido</strong></td>
                 <td class="text-left text-md-center ">
                     {% for item in order.lineitems.all %}
                         {{ item.product.name }} * {{ item.quantity }}, 
@@ -19,15 +19,15 @@
                 </td>
             </tr>
              <tr>
-                <td class="text-center d-none d-md-block"><strong>Grand Total</strong></td>
+                <td class="text-center d-none d-md-block"><strong> Total</strong></td>
                 <td class="text-left text-md-center ">
                     € {{order.grand_total}}                  
                 </td>
             </tr>
             <tr>
-                <td class="text-center d-none d-md-block" ><strong>Delivery address</strong></td>
+                <td class="text-center d-none d-md-block" ><strong>Dirección</strong></td>
                 <td class="text-left text-md-center ">
-                    <p class="d-md-none"><strong>Delivery address</strong></p>
+                    <p class="d-md-none"><strong>Dirección</strong></p>
                     <p>{{ order.full_name }}</p>
                     <p>{{ order.street_address1 }}</p>
                     {% if order.street_address2 %}
@@ -44,9 +44,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center d-none d-md-block" ><strong>Contact details</strong></td>
+                <td class="text-center d-none d-md-block" ><strong>Contacto</strong></td>
                 <td class="text-left text-md-center ">
-                    <p class="d-md-none"><strong>Your contacts</strong></p>
+                    <p class="d-md-none"><strong>Contacto</strong></p>
                     <p>{{ order.email }} / {{ order.phone_number }}</p>
                 </td>
             </tr>

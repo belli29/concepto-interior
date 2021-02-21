@@ -12,9 +12,9 @@ from products.models import Product
 from bag.contexts import bag_contents
 from profiles.models import UserProfile
 from profiles.forms import UserProfileForm
-
 import stripe
 import json
+import time
 
 
 def checkout(request):
@@ -49,16 +49,25 @@ def checkout(request):
                 pid = request.POST.get('client_secret').split('_secret')[0]
                 #avoid order duplication if user does leave the oxxo voucher modal open for too long
                 if payment_choice == "oxxo":
-                    try:
-                        #order already created by Webhook
-                        order = OxxoOrder.objects.get(stripe_pid=pid)
-                    except OxxoOrder.DoesNotExist:
-                        order = order_form.save()
+                    attempt = 1
+                    while attempt <= 10:
+                        try:
+                            # order already created by Webhook
+                            order = OxxoOrder.objects.get(stripe_pid=pid)
+                            break
+                        except OxxoOrder.DoesNotExist:
+                            attempt += 1
+                            time.sleep(1)
+                            if attempt == 10:
+                                order = order_form.save()
+                                # add pid and original bag to order
+                                order.stripe_pid = pid
+                                order.original_bag = json.dumps(bag)
                 else:
-                    order = order_form.save() 
-                # add pid and original bag to order
-                order.stripe_pid = pid
-                order.original_bag = json.dumps(bag)
+                    order = order_form.save()
+                    # add pid and original bag to order
+                    order.stripe_pid = pid
+                    order.original_bag = json.dumps(bag)
                 # add line items to order
                 for item_id, item_quantity in bag.items():
                     try:
@@ -181,8 +190,11 @@ def checkout_success(request, order_number, payment_method):
     save_info = request.session.get('save_info')
     if payment_method == "stripe":
         order = get_object_or_404(Order, order_number=order_number)
+        messages.success(request, f'Compra confirmada!\
+        Te hemos mandado la confirmacion a  {order.email}.')
     else:
         order = get_object_or_404(OxxoOrder, order_number=order_number)
+        messages.success(request, f'Te hemos mandado las instrucciones por el pago a  {order.email}.')
 
     # Attach the user's profile to the order if user is authenticated
     if request.user.is_authenticated:
@@ -204,8 +216,6 @@ def checkout_success(request, order_number, payment_method):
         if user_profile_form.is_valid():
             user_profile_form.save()
 
-    messages.success(request, f'Tu numero de confirmacion es  {order_number}.\
-        Te hemos mandado la confirmacion a  {order.email}.')
     # save session bag info to a bag variable
     bag = request.session['bag']
     bag_with_item_name = []
@@ -223,7 +233,8 @@ def checkout_success(request, order_number, payment_method):
     template = 'checkout/checkout_success.html'
     context = {
         'order': order,
-        'bag': bag_with_item_name
+        'bag': bag_with_item_name,
+        'payment': payment_method
     }
 
     return render(request, template, context)
@@ -247,21 +258,6 @@ def cache_checkout_data(request):
         messages.error(request, "There was something wrong with your payment.\
             Please try later")
         return HttpResponse(status=400)
-
-@require_POST
-def create_payment_intent_oxxo(request):
-    """
-    amends the payment method to Oxxo
-    """
-    pid = request.POST.get('client_secret').split('_secret')[0]
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    intent = stripe.PaymentIntent.create(
-    amount=1099,
-    currency='mxn',
-    payment_method_types=['oxxo']
-    )
-    return HttpResponse(status=200)
-
 
 def invoice_confirmation(request, pre_order_number):
     """
