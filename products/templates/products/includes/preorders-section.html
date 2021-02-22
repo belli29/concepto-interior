@@ -4,7 +4,6 @@
             <table class="table table-sm table-borderless">
                 <thead>
                     <tr>
-                        <th>Tipo de pago</th>
                         <th>Codigo</th>
                         <th class="d-none d-sm-table-cell">Fecha</th>
                         <th class="d-none d-sm-table-cell">Productos</th>
@@ -15,9 +14,9 @@
                 <tbody>
                     {% for order in preorders %}
                         <tr>
-                            <td> <i class="fab fa-paypal"></i></td>
                             <td>
                                 <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
+                                    <i class="fab fa-paypal fa-lg"></i>
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>
@@ -48,9 +47,9 @@
                     {% endfor %}
                     {% for order in oxxo_orders %}
                         <tr>
-                            <td> Oxxo </td>
                             <td>
                                 <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
+                                    <i class="fa fa-qrcode fa-lg" aria-hidden="true"></i>
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>

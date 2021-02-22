@@ -110,6 +110,8 @@ def management(request):
     oxxo_orders = oxxo_orders.exclude(status="INV").exclude(status="UPG")
     oxxo_orders = oxxo_orders.order_by("-date")
     pay_pal_filter = False
+    oxxo_filter = False
+    cc_filter = False
     shipped_filter = False
     unshipped_filter = False
     view_preorders = False
@@ -118,8 +120,14 @@ def management(request):
     if 'view_preorders' in request.GET:
         view_preorders = True
     if 'pay_pal_filter' in request.GET:
-        orders = orders.exclude(pp_transaction_id="")
+        orders = orders.filter(payment="PP")
         pay_pal_filter = True
+    if 'oxxo_filter' in request.GET:
+        orders = orders.filter(payment="OXXO")
+        oxxo_filter = True
+    if 'cc_filter' in request.GET:
+        orders = orders.filter(payment="CC")
+        cc_filter = True
     if 'shipped_filter' in request.GET:
         orders = orders.filter(shipped=True)
         shipped_filter = True
@@ -150,6 +158,8 @@ def management(request):
         'preorders': preorders,
         'oxxo_orders': oxxo_orders,
         'pay_pal_filter_active': pay_pal_filter,
+        'cc_filter_active': cc_filter,
+        'oxxo_filter_active': oxxo_filter,
         'shipped_filter_active': shipped_filter,
         'unshipped_filter_active': unshipped_filter,
         'current_param': current_param,

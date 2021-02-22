@@ -3,16 +3,33 @@
         <a href="{% url 'products_management' %}">
             <div id="switch-to-orders"class="{% if view_preorders %} opacity{% endif %} switch-orders badge badge-info bg-color-pr border-0">Confirmados </div>
         </a>
-        <a href="{% url 'products_management' %}?view_preorders=true">
-            <div id="switch-to-preorders"class="{% if not view_preorders %} opacity{% endif %} switch-orders badge badge-info bg-color-pr border-0">Para confirmar </div>
-        </a>
+        {% if cc_filter_active %}
+            <a href="{% url 'products_management' %}?{{current_param | cut:'cc_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products_management' %}?cc_filter=True&{{current_param | cut:'pay_pal_filter=True' | cut:'oxxo_filter=True'}}">
+        {% endif %}
+            <div id="cc_filter" class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not cc_filter_active %}opacity{% endif %}">
+                <i class="fa fa-credit-card fa-lg"></i>
+            </div>
+        </a>   
         {% if pay_pal_filter_active %}
             <a href="{% url 'products_management' %}?{{current_param | cut:'pay_pal_filter=True'}}">
         {% else %}
-            <a href="{% url 'products_management' %}?pay_pal_filter=True&{{current_param}}">
+            <a href="{% url 'products_management' %}?pay_pal_filter=True&{{current_param | cut:'cc_filter=True' | cut:'oxxo_filter=True'}}">
         {% endif %}
-            <div id="pay_pal_filter" class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not pay_pal_filter_active %}opacity{% endif %}"> PayPal Confirmados</div>
-        </a>      
+            <div id="pay_pal_filter" class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not pay_pal_filter_active %}opacity{% endif %}">
+                <i class="fab fa-paypal fa-lg"></i>
+            </div>
+        </a>
+        {% if oxxo_filter_active %}
+            <a href="{% url 'products_management' %}?{{current_param | cut:'oxxo_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products_management' %}?oxxo_filter=True&{{current_param | cut:'cc_filter=True' | cut:'pay_pal_filter=True'}}">
+        {% endif %}
+            <div id="oxxo_filter" class="{% if view_preorders %} d-none {% endif %} badge bg-color-pr badge-info {% if not oxxo_filter_active %}opacity{% endif %}">
+                <i class="fa fa-qrcode fa-lg"></i>
+            </div>
+        </a>        
         {% if shipped_filter_active %}
             <a href="{% url 'products_management' %}?{{current_param | cut:'shipped_filter=True'}}">
         {% else %}
@@ -35,7 +52,10 @@
                 <option value="grand_total-desc" {% if current_sorting == 'grand_total-desc' %}selected{% endif %}>+ caros</option>
                 <option value="grand_total-asc" {% if current_sorting == 'grand_total-asc' %}selected{% endif %}>+ baratos</option>
             </select>
-        </span> 
+        </span>
+        <a href="{% url 'products_management' %}?view_preorders=true">
+            <div id="switch-to-preorders"class="{% if not view_preorders %} opacity{% endif %} switch-orders badge badge-info bg-color-pr border-0">Para confirmar </div>
+        </a>
         {% if view_preorders %}
         {% else %}
             <a href="{% url 'products_management' %}">

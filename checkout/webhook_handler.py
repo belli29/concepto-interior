@@ -18,18 +18,9 @@ class StripeWH_Handler:
     def _send_confirmation_email(self, order, action):
         """Send the user a confirmation email"""
         cust_email = order.email
-        if action == 'cc' or 'oxxo_upgraded':
-            subject = render_to_string(
-                'checkout/confirmation_emails/confirmation_email_subject_confirmed.txt',
-                {'order': order})
-        elif action == 'oxxo_created':
-            subject = render_to_string(
-                'checkout/confirmation_emails/confirmation_email_subject_qr.txt',
-                {'order': order})
-        elif action == 'oxxo_deleted':
-            subject = render_to_string(
-                'checkout/confirmation_emails/confirmation_email_subject_qr_expired.txt',
-                {'order': order})
+        subject = render_to_string(
+            'checkout/confirmation_emails/confirmation_email_subject.txt',
+            {'order': order})
         body = render_to_string(
             'checkout/confirmation_emails/confirmation_email_body.txt',
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'action': action})
@@ -238,6 +229,7 @@ class StripeWH_Handler:
                     quantity=li.quantity,
                 )
                 order_line_item .save()
+            self._send_confirmation_email(order, 'oxxo_upgrade')
             self._update_product_quantity(bag, 'oxxo_upgrade')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
