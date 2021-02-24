@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0$^xsnsdcdto!p8)!2$pp=+4thup-qm=j@1bu*b2g93n+n002^'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = 'DEVELOPMENT' in os.environ
+
+ALLOWED_HOSTS = ['concepto-interior.herokuapp.com/', 'localhost']
 
 # Application definition
 
