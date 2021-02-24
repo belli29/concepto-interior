@@ -1,0 +1,1 @@
+web: gunicorn concepto-interior.wsgi:application
