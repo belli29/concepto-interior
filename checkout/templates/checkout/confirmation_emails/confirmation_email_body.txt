@@ -4,7 +4,10 @@ Aquì tienes un resumen de tu pedido:
 
 Orden: {{ order.order_number }}
 Fecha: {{ order.date }}
-
+Productos:
+{% for item in order.lineitems.all %}
+    {{ item.product.name }} * {{ item.quantity }}, 
+{% endfor  %} 
 Total: ${{ order.order_total }}
 Envío: ${{ order.delivery_cost }}
 Grand Total: ${{ order.grand_total }}

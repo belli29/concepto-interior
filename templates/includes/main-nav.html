@@ -3,17 +3,17 @@
         {% if request.user.is_superuser %}
             <li class="nav-item dropdown">
                 <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'products_management' %}" id="list-link">
-                    Orders
+                    Ordenes
                 </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'list_products' %}" id="list-link">
-                    Products
+                    Productos
                 </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="logo-font font-weight-bold nav-link text-black mr-lg-4 text-nowrap" href="{% url 'support' %}" id="support-link">
-                    IT Support
+                    Soporte 
                 </a>
             </li>
         {% else %}

@@ -74,7 +74,7 @@
                             <a class="text-black nav-link pr-0" href="#" id="mobile-search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div class="text-center">
                                 <div><i class="fas fa-search fa-lg"></i></div>
-                                <p class="my-0 d-none d-md-block">Search</p>
+                                <p class="my-0 d-none d-md-block">Busqueda</p>
                                 </div>
                             </a>
                             <div class="dropdown-menu border-0 w-100 p-3 rounded-0 my-0" aria-labelledby="mobile-search">
@@ -113,7 +113,7 @@
                                     {% if request.user.is_authenticated %}
                                         <p class="my-0 text-sm d-none d-md-block">{{request.user.username}}</p>
                                     {% else %}
-                                        <p class="my-0 text-sm d-none d-md-block">My Account</p>
+                                        <p class="my-0 text-sm d-none d-md-block">Mi cuenta</p>
                                     {% endif %}
                                 </div>
                             </a>
@@ -122,11 +122,11 @@
                                 {% if request.user.is_authenticated %}
                                     {% if request.user.is_superuser %}
                                     {% else %}
-                                        <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">My Profile</a>
-                                        <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Logout</a>
+                                        <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">Mi Cuenta</a>
+                                        <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Salir</a>
                                     {% endif %}
                                 {% else %}
-                                    <a href="{% url 'account_signup' %}" class="dropdown-item dropdown-item dropdown-item-pr">Register</a>
+                                    <a href="{% url 'account_signup' %}" class="dropdown-item dropdown-item dropdown-item-pr">Registrate!</a>
                                     <a href="{% url 'account_login' %}" class="dropdown-item dropdown-item dropdown-item-pr">Login</a>
                                 {% endif %}
                             </div>
@@ -142,12 +142,10 @@
                                     {% else%}
                                         <div><i class="fas fa-shopping-bag fa-lg"></i></div>
                                         <p id="base-total" class="my-0 d-none d-md-block">
-                                            {% if delivery_problem %}
-                                                &nbsp
-                                            {% elif grand_total %}
-                                                €{{ grand_total|floatformat:2 }}
+                                            {% if grand_total %}
+                                                ${{ grand_total|floatformat:2 }}
                                             {% else %}
-                                                €0.00
+                                                $0.00
                                             {% endif %}
                                         </p>
                                     {% endif %}
@@ -162,7 +160,7 @@
             <div class="col bg-black text-white ">
                 {% if request.user.is_superuser%}
                     {% if today_orders_count == 0  and today_preorders_count == 0 and today_oxxo_orders_count == 0  %}
-                        <div class="logo-font my-1">Hoy, {{today|date}}, ho hubo ordenes</div>
+                        <div class="logo-font my-1">Hoy, {{today|date}}, no hubo ordenes</div>
                     {% else %}
                         <div class="logo-font my-1">Hoy, {{today|date}}, recibiste
                             {% if today_orders_count == 0 %}
