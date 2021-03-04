@@ -28,9 +28,12 @@ Hemos recibido el pago de Oxxo . Tu pedido se enviarà cuanto antes a {{ order.s
 Hemos recibido el pago por Paypal . Tu pedido se enviarà cuanto antes a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
 {% elif action == 'oxxo_deleted' %}
 No hemos recibido algun pago por parte de Oxo . El pedido ha sido anulado.
+{% elif action == 'invalid_preorder' %}
+No hemos recibido algun pago a nuestra cuenta PayPal . El pedido ha sido anulado.
+
 {% endif %}
 
-Si tienes cualquier pregunta contactanos a  {{ contact_email }}.
+En caso de dudas, contactanos a {{ contact_email }}.
 
 Atentamente,
 

@@ -1,1 +1,0 @@
-Anulación pedido {{ order.order_number }}

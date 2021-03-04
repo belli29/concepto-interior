@@ -1,0 +1,9 @@
+Hola {{ order.full_name }}!
+
+Te hemos informnado por error que tu orden ha sido enviado.
+
+Lo sentimos ! 
+
+Tu pedido serà enviado cuanto antes.
+
+Concepto Interior

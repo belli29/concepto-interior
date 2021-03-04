@@ -1,1 +1,0 @@
-Pedido {{ order.order_number }}

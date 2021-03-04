@@ -1,1 +1,0 @@
-Codigo QR por orden {{ order.order_number }}
