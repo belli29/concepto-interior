@@ -10,8 +10,11 @@ Productos:
 {% endfor  %} 
 Total: ${{ order.order_total }}
 Envío: ${{ order.delivery_cost }}
-Grand Total: ${{ order.grand_total }}
-
+{% if action == 'preorder' %}
+Total con envío y descuento aplicado : ${{ order.grand_total }}
+{% else %}
+Total con envío : ${{ order.grand_total }}
+{% endif%}
 {% if action == 'oxxo_created' %}
 Tiens 3 dias para pagar el pedido en cualquier Oxxo . Tu pedido se enviarà cuando recibamos el pago a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
 {% elif action == 'preorder' %}
@@ -21,6 +24,8 @@ Tiens 3 dias para pagar el pedido a nuestra cuenta Paypal . Ponte en contacto co
 Tu pedido se enviarà cuanto antes a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
 {% elif action == 'oxxo_upgrade' %}
 Hemos recibido el pago de Oxxo . Tu pedido se enviarà cuanto antes a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
+{% elif action == 'preorder_confirmed' %}
+Hemos recibido el pago por Paypal . Tu pedido se enviarà cuanto antes a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
 {% elif action == 'oxxo_deleted' %}
 No hemos recibido algun pago por parte de Oxo . El pedido ha sido anulado.
 {% endif %}

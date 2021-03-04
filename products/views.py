@@ -336,6 +336,21 @@ def confirm_pre_order(request, order_number):
         f'New order {order.order_number} confirmed.'
         )
     )
+    # send email
+    cust_email = order.email
+    subject = render_to_string(
+        'checkout/confirmation_emails/confirmation_email_subject.txt',
+        {'order': order})
+    body = render_to_string(
+        'checkout/confirmation_emails/confirmation_email_body.txt',
+        {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'action': 'preorder_confirmed'})
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
+
     return redirect(reverse('products_management'))
 
 
@@ -357,11 +372,11 @@ def invalid_pre_order(request, order_number):
     # email user
     cust_email = pre_order.email
     subject = render_to_string(
-        'checkout/confirmation_emails/invalid_preorder_subject.txt',
-        {'preorder': pre_order})
+        'checkout/confirmation_emails/confirmation_email_subject.txt',
+        {'order': pre_order})
     body = render_to_string(
-        'checkout/confirmation_emails/invalid_preorder_body.txt',
-        {'preorder': pre_order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+        'checkout/confirmation_emails/confirmation_email_body.txt',
+        {'order': pre_order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'action': 'invalid_preorder'})
 
     send_mail(
         subject,
@@ -369,14 +384,14 @@ def invalid_pre_order(request, order_number):
         settings.DEFAULT_FROM_EMAIL,
         [cust_email]
     )
-    # delete preorder
+    # set preorder as invalid
     pre_order.status = "INV"
     pre_order.save()
     # success message
     messages.success(
         request,
-        f'preorder {pre_order.order_number} marked as invalid or expired.'
-        'Avaialbility has been replenished'
+        f'Preorder {pre_order.order_number} marcado como invalido.'
+        'Disponibilidad actualizada. El cliente ha sido informado por mail '
         )
     return redirect(reverse('products_management'))
 
