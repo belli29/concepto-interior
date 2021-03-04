@@ -21,8 +21,7 @@ Productos:
 {% for item in order.lineitems.all %}
     {{ item.product.name }} * {{ item.quantity }}, 
 {% endfor  %} 
-Total: ${{ order.order_total }}
-Envío: ${{ order.delivery_cost }}
+Total: ${{ order.grand_total }}
 
 En caso de dudas, contactanos a {{ contact_email }}.
 
