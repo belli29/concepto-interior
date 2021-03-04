@@ -14,6 +14,9 @@ Grand Total: ${{ order.grand_total }}
 
 {% if action == 'oxxo_created' %}
 Tiens 3 dias para pagar el pedido en cualquier Oxxo . Tu pedido se enviarà cuando recibamos el pago a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
+{% elif action == 'preorder' %}
+Tiens 3 dias para pagar el pedido a nuestra cuenta Paypal . Ponte en contacto con nosotros en cuanto hayas realizado el pago y tu pedido se enviarà a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
+
 {% elif action == 'cc' %}
 Tu pedido se enviarà cuanto antes a {{ order.street_address1 }} en {{ order.town_or_city }}, {{ order.country }}.
 {% elif action == 'oxxo_upgrade' %}
