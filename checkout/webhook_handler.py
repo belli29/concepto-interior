@@ -269,6 +269,7 @@ class StripeWH_Handler:
         # order exists
         if order is not None:
             self._send_confirmation_email(order, 'cc')
+            send_email_seller(order, 'cc')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
                 ' | SUCCESS: Verified order already in database',
