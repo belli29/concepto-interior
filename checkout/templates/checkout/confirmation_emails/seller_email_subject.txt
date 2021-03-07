@@ -1,0 +1,1 @@
+Has recibido un nuevo pedido en la web: {{ order.order_number }}

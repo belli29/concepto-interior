@@ -259,12 +259,16 @@ def cache_checkout_data(request):
             Please try later")
         return HttpResponse(status=400)
 
+
+
+
 def invoice_confirmation(request, pre_order_number):
     """
     Handle invoice confirmation when user selects paypal payment method
     """
     order = get_object_or_404(PreOrder, order_number=pre_order_number)
 
+    send_email_seller(order, 'preorder')
     # send email
     cust_email = order.email
     subject = render_to_string(
@@ -316,7 +320,7 @@ def invoice_confirmation(request, pre_order_number):
 
     # add success message
     messages.success(
-        request, f'You will soon receive the invoice at {cust_email}.'
+        request, f'Pronto recibiras la factura a {cust_email}.'
     )
 
     template = 'checkout/invoice_confirmation.html'
@@ -351,3 +355,20 @@ def quantity_problem(request):
         del request.session['bag']
         return redirect(reverse('products'))
 
+# helper functions
+def send_email_seller(order, action):
+    """Send the seller a confirmation email"""
+    seller_email = settings.SELLER_EMAIL
+    subject = render_to_string(
+        'checkout/confirmation_emails/seller_email_subject.txt',
+        {'order': order})
+    body = render_to_string(
+        'checkout/confirmation_emails/seller_email_body.txt',
+        {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'action': action})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [seller_email]
+    )

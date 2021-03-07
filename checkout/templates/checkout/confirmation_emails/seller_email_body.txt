@@ -1,0 +1,31 @@
+Hola Artur!
+
+Acaband hacer este pedido:
+
+Orden: {{ order.order_number }}
+Fecha: {{ order.date }}
+Productos:
+{% for item in order.lineitems.all %}
+    {{ item.product.name }} * {{ item.quantity }}, 
+{% endfor  %} 
+Total: ${{ order.order_total }}
+Envío: ${{ order.delivery_cost }}
+
+Dirrecion de envio :
+{{ order.full_name }}
+{{ order.email }}
+{{ order.phone_number }}
+{{ order.street_address1 }}
+{{ order.street_address2 }}
+{{ order.county }}
+{{ order.postcode }}
+{{ order.country }}
+
+
+{% if action == 'preorder' %}
+El cliente tiene 3 dias para hacerte el pago en la cuenta Paypal. Si no recibes nada puedes cancelar el orden accedendo a tu cuenta en al web
+{% elif action == 'oxxo_confirmed' %}
+El cliente ha hecho el pago en el Oxxo. Envia el producto y actualiza la info en la web
+{% elif action == 'cc' %}
+El cliente ha hecho el pago en el Oxxo. Envia el producto y actualiza la info en la web
+{% endif %}

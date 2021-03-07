@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import Order, OrderLineItem, OxxoOrder, OxxoOrderLineItem
+from.views import send_email_seller
 from products.models import Product
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -230,12 +231,14 @@ class StripeWH_Handler:
                 )
                 order_line_item .save()
             self._send_confirmation_email(order, 'oxxo_upgrade')
+            send_email_seller(order, 'oxxo_confirmed')
             self._update_product_quantity(bag, 'oxxo_upgrade')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
                 ' | SUCCESS: Oxxo Order paid by customer',
                 status=200
                 )
+        # if payment confirmation for cc payment
         self._clean_shipping_details(shipping_details)
         # Update profile information if save_info was checked
         profile = None
@@ -302,6 +305,7 @@ class StripeWH_Handler:
                     content=f'Webhook received: {event["type"]} | ERROR: {e}',
                     status=500)
             self._send_confirmation_email(order, 'cc')
+            send_email_seller(order, 'cc')
             return HttpResponse(
                 content=f'Webhook received: {event["type"]}'
                 ' | SUCCESS: Created order in webhook',
