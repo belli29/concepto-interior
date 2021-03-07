@@ -27,5 +27,5 @@ El cliente tiene 3 dias para hacerte el pago en la cuenta Paypal. Si no recibes 
 {% elif action == 'oxxo_confirmed' %}
 El cliente ha hecho el pago en el Oxxo. Envia el producto y actualiza la info en la web
 {% elif action == 'cc' %}
-El cliente ha hecho el pago en el Oxxo. Envia el producto y actualiza la info en la web
+El cliente ha hecho el pago con tarjeta. Envia el producto y actualiza la info en la web
 {% endif %}
