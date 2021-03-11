@@ -64,21 +64,21 @@
                                         <tr>
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" ></h6><strong>Total</strong></h6></td>
-                                            <td class="text-right text-sm-right"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-right text-sm-right"><h6><strong>${{ total|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr id="delivery-table-row">
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" >
                                                 <h6>
-                                                    <strong>Envio</strong>
+                                                    <strong>Envío</strong>
                                                 </h6>
                                             </td>
-                                            <td class="text-right text-sm-right"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-right text-sm-right"><h6><strong>${{ delivery|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr class="{% if delivery_problem %} d-none {% endif %}">
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" ><h4><strong>Total</strong></h4></td>
-                                            <td class="text-right"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
+                                            <td class="text-right"><h4><strong>${{ grand_total|floatformat:2 }}</strong></h4></td>
                                         </tr>   
                                         <tr>
                                             {% if free_delivery_delta > 0%}
@@ -110,7 +110,7 @@
                     </div>
                     <div class="col-6 col-md-2 offset-md-8 pr-0 text-right">
                         <a href="{% url 'checkout' %}" class="btn btn-outline-pr rounded-0 mx-auto ">
-                            <span class="text-uppercase">Checkout</span>
+                            <span class="text-uppercase">Pago</span>
                             <span class="icon">
                                 <i class="fas fa-lock"></i>
                             </span>

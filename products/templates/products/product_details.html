@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col text-center mt-3">
                 <h2 class=" top-title logo-font ">{{ product.name }}</h2>
-                <div class="text-muted ">€{{ product.price }}</div> 
+                <div class="text-muted ">${{ product.price }}</div> 
                 {% if request.user.is_superuser %}
                     <div class=" mx-2">
                         <span> 

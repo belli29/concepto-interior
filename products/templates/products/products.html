@@ -14,10 +14,10 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3">
-                <h2 class="top-title logo-font">Products</h2>
+                <h2 class="top-title logo-font">Productos</h2>
                 <div class="text-muted ">
-                    {{products|length}} results {% if search_term %} 
-                    for"{{search_term}}"{% endif %} {% if current_category %}
+                    {{products|length}} resultados {% if search_term %} 
+                    por "{{search_term}}"{% endif %} {% if current_category %}
                     in {{current_category.friendly_name}}{% endif %}
                 </div>
                 <hr class="w-75 mb-1 hr-color-pr">
@@ -45,14 +45,14 @@
                                         <div>
                                             <img class="card-img-top card-products img-fluid opacity" src="{{ product.image_one.url }}" alt="{{ product.name }}">
                                             <div class="not-available-banner">
-                                                Not Available 
+                                                No Disponible 
                                             </div>
                                         </div>
                                     {% else %}
                                         <div>
                                             <img class="card-img-top card-products img-fluid opacity" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
                                             <div class="not-available-banner">
-                                                Not Available 
+                                                No Disponible 
                                             </div>
                                         </div>    
                                     {% endif %}
@@ -64,7 +64,7 @@
                                 <div class="card-footer bg-white pt-0 border-0 text-left">
                                     <div class="row">
                                         <div class="col">
-                                            <p class="lead mb-0 text-left font-weight-bold">€{{ product.price }}</p>
+                                            <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
                                         </div>
                                     </div>
                                 </div>
