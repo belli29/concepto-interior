@@ -1,4 +1,4 @@
-# Concepto Interir
+# Concepto Interior
 
 Furnitart is a furniture shop based in Mexico. The ambition is to start delivring prodcuts all over the repubblic of Mexico using this website.
 
@@ -59,6 +59,6 @@ This website is designed for 2 different users : the customer and the seller.
 
 ## Want to see how it looks like ?
 
-- The webiste is deployed on [Heroku](https://concepto-interior.herokuapp.com/)
+- The webiste is temporary deployed on [Heroku](https://concepto-interior.herokuapp.com/)
 
 
