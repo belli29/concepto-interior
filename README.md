@@ -28,7 +28,7 @@ This website is designed for 2 different users : the customer and the seller.
 
 ### Existing Features
 
-- Management: allows sellers to keep track and modify inventory, orders and preorders. Amending orders / preorders allows seller to send automatic emails to customers and keep them updated of order/preorder/shipment status
+- Management: allows sellers to keep track and modify inventory, orders and preorders. Amending orders / preorders allows seller to send automatic emails to customers and keep them updated of order/preorder/shipment status. The seller can also set a minimum amount for free delivery orders. 
 - Profile: allows users to amend delivery information and keep track of orders and preorders
 - Products:allows user to see the products, filter and order them
 - Checkout:allows user get a PayPal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a web hooker. This ensures that orders are always correctly registered in the server. In case the payment was processed but order was not processed by mistake , webhooker will create an order.
