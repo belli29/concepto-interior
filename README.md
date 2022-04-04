@@ -1,6 +1,6 @@
 # Concepto Interior
 
-Furnitart is a furniture shop based in Mexico. The ambition is to start delivring prodcuts all over the repubblic of Mexico using this website.
+Concepto Interior is a furniture shop based in Mexico. The ambition is to start delivring prodcuts all over the repubblic of Mexico using this website.
 
 ## UX
 
